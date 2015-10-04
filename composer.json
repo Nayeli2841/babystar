@@ -1,0 +1,16 @@
+{
+    "require": {
+		"slim/slim": ">=2.4.0",
+        "twig/twig":"~1.0",
+		"lichtner/fluentpdo": "dev-master",
+        "slim/views": "0.1.*" 
+    },
+	"autoload": {
+		"classmap": ["Repo"],
+        "psr-0": {
+		   "Slim\\Views\\": "./"
+        }
+    },
+    "target-dir": "Slim/Extras"
+
+}
