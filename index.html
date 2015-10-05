@@ -38,7 +38,7 @@
 
       function validation()
       {
-      	var name 			= $.trim($('#name').val());
+      	var name 			= $.trim($('#parent_name').val());
       	var child_name 		= $.trim($('#child_name').val());
       	var years 			= $.trim($('#years').val());
       	var months 			= $.trim($('#months').val());
@@ -53,8 +53,8 @@
 
       	if(name == '')
       	{
-      		$('#name').focus();
-      		$('#name').addClass('has-error');
+      		$('#parent_name').focus();
+      		$('#parent_name').addClass('has-error');
       		check = false;
       	}
       	if(child_name == '')
@@ -122,89 +122,13 @@
     </script>
 
 <script>
-  // // This is called with the results from from FB.getLoginStatus().
-  // function statusChangeCallback(response) {
-  //   console.log('statusChangeCallback');
-  //   console.log(response);
-  //   // The response object is returned with a status field that lets the
-  //   // app know the current login status of the person.
-  //   // Full docs on the response object can be found in the documentation
-  //   // for FB.getLoginStatus().
-  //   if (response.status === 'connected') {
-  //     // Logged into your app and Facebook.
-  //     testAPI();
-  //   } else if (response.status === 'not_authorized') {
-  //     // The person is logged into Facebook, but not your app.
-  //     document.getElementById('status').innerHTML = 'Please log ' +
-  //       'into this app.';
-  //   } else {
-  //     // The person is not logged into Facebook, so we're not sure if
-  //     // they are logged into this app or not.
-  //     document.getElementById('status').innerHTML = 'Please log ' +
-  //       'into Facebook.';
-  //   }
-  // }
-
-  // // This function is called when someone finishes with the Login
-  // // Button.  See the onlogin handler attached to it in the sample
-  // // code below.
-  // function checkLoginState() {
-  //   FB.getLoginStatus(function(response) {
-  //     statusChangeCallback(response);
-  //   });
-  // }
-
-  // window.fbAsyncInit = function() {
-  // FB.init({
-  //   appId      : '793643427414904',
-  //   cookie     : true,  // enable cookies to allow the server to access 
-  //                       // the session
-  //   xfbml      : true,  // parse social plugins on this page
-  //   version    : 'v2.2' // use version 2.2
-  // });
-
-  // // Now that we've initialized the JavaScript SDK, we call 
-  // // FB.getLoginStatus().  This function gets the state of the
-  // // person visiting this page and can return one of three states to
-  // // the callback you provide.  They can be:
-  // //
-  // // 1. Logged into your app ('connected')
-  // // 2. Logged into Facebook, but not your app ('not_authorized')
-  // // 3. Not logged into Facebook and can't tell if they are logged into
-  // //    your app or not.
-  // //
-  // // These three cases are handled in the callback function.
-
-  // FB.getLoginStatus(function(response) {
-  //   statusChangeCallback(response);
-  // });
-
-  // };
-
-  // // Load the SDK asynchronously
-  // (function(d, s, id) {
-  //   var js, fjs = d.getElementsByTagName(s)[0];
-  //   if (d.getElementById(id)) return;
-  //   js = d.createElement(s); js.id = id;
-  //   js.src = document.location.protocol +"//connect.facebook.net/en_US/sdk.js";
-  //   fjs.parentNode.insertBefore(js, fjs);
-  // }(document, 'script', 'facebook-jssdk'));
-
-  // // Here we run a very simple test of the Graph API after login is
-  // // successful.  See statusChangeCallback() for when this call is made.
-  // function testAPI() {
-  //   console.log('Welcome!  Fetching your information.... ');
-  //   FB.api('/me', function(response) {
-  //     console.log('Successful login for: ' + response.name);
-  //     document.getElementById('status').innerHTML =
-  //       'Thanks for logging in, ' + response.name + '!';
-  //   });
-  // }
-
-
+  
   function getUserData() {
-	FB.api('/me', function(response) {
-		document.getElementById('response').innerHTML = 'Hello ' + response.name;
+	FB.api('/me?fields=name,email', function(response) {
+    console.log(response);
+//    $('#status').append('<a href="" onclick="FB.logout();">Logout</a> ');
+    $('#parent_name').val(response.name);
+    $('#email').val(response.email);
 	});
 }
  
@@ -213,7 +137,7 @@ window.fbAsyncInit = function() {
 	FB.init({
 		appId      : '793643427414904',
 		xfbml      : true,
-		version    : 'v2.2'
+		version    : 'v2.4'
 	});
  
 	//check user session and refresh it
@@ -241,6 +165,7 @@ window.fbAsyncInit = function() {
 function checkLoginState(){
 	//do the login
 	FB.login(function(response) {
+    console.log(response);
 		if (response.authResponse) {
 			//user just authorized your app
 			document.getElementById('loginBtn').style.display = 'none';
@@ -255,25 +180,25 @@ function checkLoginState(){
 
 
   </head>
-  <body style="background-color:#EEFBFF;">
+  <body class="body_bg">
 
-    <div class="container-fluid">
+    <div class="container ">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-8 center_div">
 			<form class="form-horizontal" role="form">
         <div class="form-group">
-          <img src="images/logo.gif"> 
+          <img src="images/logo.gif" class="form_logo"> 
         </div>
 
         <div class="form-group">
            
-          <label for="name" class="col-sm-2 control-label">
+          <label for="name" class="col-sm-4 control-label">
 
           </label>
           <div class="col-sm-4">
-          <a class="btn btn-primary" onclick="checkLoginState();"><i class="fa fa-facebook"></i> Fill information using Facebook</a>
+          <a class="btn btn-primary" id="loginBtn" onClick="checkLoginState();"><i class="fa fa-facebook"></i> Fill information using Facebook</a>
           </div>
-                    <div id="response"></div>
+        
 
         </div>
           <div id="status"></div>
@@ -282,30 +207,30 @@ function checkLoginState(){
 
 				<div class="form-group">
 					 
-					<label for="name" class="col-sm-2 control-label">
+					<label for="name" class="col-sm-4 control-label">
 						Name
 					</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="name" required>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="parent_name" required>
 					</div>
 				</div>
 
 				<div class="form-group">
 					 
-					<label for="childName" class="col-sm-2 control-label">
+					<label for="childName" class="col-sm-4 control-label">
 						Name your child
 					</label>
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<input type="text" class="form-control" id="child_name" required>
 					</div>
 				</div>
 
 					<div class="form-group">
 					 
-					<label for="age" class="col-sm-2 control-label">
+					<label for="age" class="col-sm-4 control-label">
 						Age
 					</label>
-					<div class="col-sm-1">
+					<div class="col-sm-2">
 <!-- 					<label for="age" class="col-sm-2 control-label">
 						Years
 					</label> -->
@@ -317,7 +242,7 @@ function checkLoginState(){
    						 <option value="3">3</option>
   					</select>
   					</div>
-  					<div class="col-sm-1">
+  					<div class="col-sm-2">
 <!--   					<label for="age" class="col-sm-2 control-label">
 						Months
 					</label> -->
@@ -337,7 +262,7 @@ function checkLoginState(){
    						 <option value="11">eleven</option>
   					</select>
   					</div>
-  					<div class="col-sm-1">
+  					<div class="col-sm-2">
 <!--   					<label for="age" class="col-sm-2 control-label">
 						Days
 					</label> -->
@@ -380,11 +305,11 @@ function checkLoginState(){
 				
 				<div class="form-group">
 					 
-					<label for="branch_office" class="col-sm-2 control-label">
+					<label for="branch_office" class="col-sm-4 control-label">
 						Branch Office
 					</label>
-					<div class="col-sm-4">
-						<select class="selectpicker" id="branch_office">
+					<div class="col-sm-6">
+						<select class="selectpicker" id="branch_office" >
    						 <option>Escandon</option>
    						 <option>San Jeronimo</option>
    						 <option>San Angel</option>
@@ -397,11 +322,11 @@ function checkLoginState(){
 
 					<div class="form-group">
 					 
-					<label for="hours" class="col-sm-2 control-label">
+					<label for="hours" class="col-sm-4 control-label">
 						Required Hours
 					</label>
 					<div class="col-sm-5">
-					<label for="start_time" class="col-sm-2 control-label">
+					<label for="start_time" class="col-sm-6 control-label" style="text-align:left; width:60px;">
 						From
 					</label>
 					<select class="selectpicker" id="start_time" data-width="25%">
@@ -458,29 +383,29 @@ function checkLoginState(){
 
 				<div class="form-group">
 					 
-					<label for="inputEmail3" class="col-sm-2 control-label">
+					<label for="inputEmail3" class="col-sm-4 control-label">
 						Email
 					</label>
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<input type="email" class="form-control" id="email" required>
 					</div>
 				</div>
 				<div class="form-group">
 					 
-					<label for="phone" class="col-sm-2 control-label">
+					<label for="phone" class="col-sm-4 control-label">
 						Phone
 					</label>
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<input type="text" class="form-control" id="phone" required>
 					</div>
 				</div>
 
 				<div class="form-group">
 					 
-					<label for="services" class="col-sm-2 control-label">
+					<label for="services" class="col-sm-4 control-label">
 						What services interest you 
 					</label>
-					<div class="col-sm-4">
+					<div class="col-sm-6">
           <div class="checkbox checkbox-primary">
               <input id="checkbox1" type="checkbox">
               <label for="checkbox1">
@@ -533,11 +458,11 @@ function checkLoginState(){
 
 				<div class="form-group">
 					 
-					<label for="branch_office" class="col-sm-2 control-label">
+					<label for="branch_office" class="col-sm-4 control-label">
 						How did he find out about us
 					</label>
-					<div class="col-sm-4">
-						<select class="selectpicker" id="refer_to" onchange="changeReferBy(this.value);">
+					<div class="col-sm-6">
+						<select class="selectpicker" id="refer_to" onChange="changeReferBy(this.value);">
    						 <option value="recommendation">Recommendation</option>
    						 <option value="google">Google</option>
    						 <option value="bing">Bing</option>
@@ -547,14 +472,14 @@ function checkLoginState(){
    						 <option value="other">Other - specify</option>
   					</select>
             <br><br>
-  					<input type="text" style="display:none;" class="form-control" id="refer_to_other" placeholder="other">
+  					<input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="other">
 					</div>
 				</div>
 
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-sm-offset-4 col-sm-10">
 						 
-						<button type="submit" class="btn btn-primary" onclick="validation();">
+						<button type="submit" class="btn btn-primary" onClick="validation();">
 							Download Brochure
 						</button>
 					</div>
