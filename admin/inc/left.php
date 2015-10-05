@@ -1,7 +1,7 @@
   <div id="nav"> 
     <!--logo start-->
     <div class="profile">
-      <div class="logo"><a href=""><img style="width:44px;" src="../asset/images/logo.png" alt=""></a></div>
+      <div class="logo"><a href=""><img style="width:120px;" src="../asset/images/logo.gif" alt=""></a></div>
     </div><!--logo end--> 
     
     <!--navigation start-->
@@ -13,14 +13,7 @@
   $currFile = basename($_SERVER['PHP_SELF']); 
  ?>
 
- <li class="sub"> <a <?php if($currFile == 'project_categories.php' ) echo 'class="active"'; ?> href="project_categories.php"><i class="fa fa-sitemap"></i><span>Project Categories</span></a>
- <li class="sub"> <a <?php if($currFile == 'queries.php' ) echo 'class="active"'; ?> href="queries.php"><i class="fa  fa-envelope-o"></i><span>Queries</span></a>
- <li class="sub"> <a <?php if($currFile == 'testimonial.php' ) echo 'class="active"'; ?> href="testimonial.php"><i class="fa  fa-thumbs-o-up"></i><span>Testimonials</span></a>
- <li class="sub"> <a <?php if($currFile == 'team.php' ) echo 'class="active"'; ?> href="team.php"><i class="fa fa-group"></i><span>Team</span></a>
- <li class="sub"> <a <?php if($currFile == 'projects.php' ) echo 'class="active"'; ?> href="projects.php"><i class="fa fa-picture-o"></i><span>Projects</span></a>
- <li class="sub"> <a <?php if($currFile == 'news.php' ) echo 'class="active"'; ?> href="news.php"><i class="fa fa-bullhorn"></i><span>News</span></a>
- <li class="sub"> <a <?php if($currFile == 'services.php' ) echo 'class="active"'; ?> href="services.php"><i class="fa fa-reply"></i><span>Services</span></a>
- <li class="sub"> <a <?php if($currFile == 'clients.php' ) echo 'class="active"'; ?> href="clients.php"><i class="fa fa-group"></i><span>Clients</span></a>
+ <li class="sub"> <a <?php if($currFile == 'dashboard.php' ) echo 'class="active"'; ?> href="dashboard.php"><i class="fa fa-sitemap"></i><span>Dashboard</span></a>
 
 
 <?php /*

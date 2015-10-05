@@ -23,7 +23,7 @@
 <div class="container login-bg">
 
 <form action="http://198.154.230.250/marketplace/atom/index.html" class="login-form-signin">
-  <div class="login-logo"><img src="../asset/images/logo.png"></div>
+  <div class="login-logo"><img src="../asset/images/logo.gif"></div>
     <h2 class="login-form-signin-heading">Login Your Account</h2>
         <div class="login-wrap">
           <div class="notification-bar" id="msg" style="display: none;"></div>
