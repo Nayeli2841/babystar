@@ -170,6 +170,12 @@ $app->group('/api', function () use ($app) {
         
     });     
 
+    $app->get('/reporting', function() use ($app){
+        $new = new ReportingRepo();
+        $data = $new->getReporting($app->requestdata);
+        response(200, array('data' => $data));
+    });
+
     $app->get('/logout' , function () use ($app){
         session_destroy();
         response(200, array());

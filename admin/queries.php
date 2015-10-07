@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>:: Romeo Admin :: </title>
+<title>:: Babystar :: </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php include('inc/js.php') ;?>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -145,10 +145,10 @@ $( document ).ready(function() {
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th style="width:450px;">Message</th>
+                    <th>Parent Name</th>
+                    <th>Child Name</th>
+                    <th>Age</th>
+                    <th>Date</th>
                     <th>Actions</th>
                   </tr>
                 </thead>

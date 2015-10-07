@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>:: Romeo Admin :: </title>
+<title>:: Babystar :: </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="bs3/css/bootstrap.min.css" rel="stylesheet">

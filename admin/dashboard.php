@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>:: Romeo Admin :: </title>
+<title>:: Babystar :: </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php include('inc/js.php') ;?>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -13,8 +13,8 @@
     <![endif]-->
 
 <script>
-$( document ).ready(function() {
-  adminData();
+$(function () {
+  getReportingData()
 });
 </script>
 </head>
@@ -33,7 +33,6 @@ $( document ).ready(function() {
 
 
 
-
   <?php
     include('inc/nav.php');
   ?>
@@ -41,97 +40,61 @@ $( document ).ready(function() {
     <div class="margin-container">
     <!--scrollable wrapper start-->
       <div class="scrollable wrapper">
-      <!--row start-->
-        <div class="row">
-         <!--col-md-12 start-->
-          <div class="col-md-12">
-            <div class="page-heading">
-              <h1>Profile </h1>
-            </div>
-          </div><!--col-md-12 end-->
-          <div class="col-sm-6 col-md-12">
-            <div class="box-info">
-              
-                <div class="container">
-                <div class="row clearfix">
-                  <div class="col-md-10 column">
-                    <div class="notification-bar" id="msg" style="display: none;"></div>
-                    <form class="form-horizontal" role="form" onsubmit="return false;">
-                      <div class="form-group">
-                         <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-4">
-                          <input type="text" class="form-control" id="name" />
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
 
-              <div class="container">
-              <div class="row clearfix">
-                <div class="col-md-10 column">
-                  <form class="form-horizontal" role="form" onsubmit="return false;">
-                    <div class="form-group">
-                       <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" id="email" />
-                      </div>
-                    </div>
-                  </form>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
+        <div id="branch_container"></div>
+
+
+
+
+
+          <div class="row" style="margin-top:10px;">
+            <div class="col-lg-4">
+              <div class="panel">
+                <div class="panel-body">
+                  <table class="table">
+                    <thead><th style="text-align:center;" colspan="2">Downloads in current month</th></tr>
+                    <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
+                    <tr><td id="last_month_str"></td><td id="last_month_download"></td></tr>
+                    <tr><td id="cur_percentage_str"></td><td id="cur_percentage"></td></tr>                    
+                  </table>
                 </div>
               </div>
             </div>
-
-        <img src="images/spinner.gif" id="spinner" style="position:absolute; right:150px; display:none;">
-        <button type="button" onclick="updateAdminData();" class="btn btn-primary">Submit</button>
-        </div>
-  </div>
-
-   <div class="col-sm-6 col-md-12">
-            <div class="box-info">
-                        <div class="container">
-          <div class="row clearfix">
-                  <div class="col-md-10 column">
-                    <div class="notification-bar" id="msg" style="display: none;"></div>
-                    <form class="form-horizontal" role="form" onsubmit="return false;">
-                      <div class="form-group">
-                         <label for="inputEmail3" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-4">
-                          <input type="password" class="form-control" id="password" />
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-              <div class="container">
-              <div class="row clearfix">
-                <div class="col-md-10 column">
-                  <form class="form-horizontal" role="form" onsubmit="return false;">
-                    <div class="form-group">
-                       <label for="inputEmail3" class="col-sm-2 control-label">Confirm Password</label>
-                        <div class="col-sm-4">
-                        <input type="password" class="form-control" id="confirm_password" />
-                      </div>
-                    </div>
-                  </form>
+            <div class="col-lg-4">
+              <div class="panel">
+                <div class="panel-body">
+                  <table class="table">
+                    <thead><th style="text-align:center;" colspan="2">Downloads in current year</th></tr>
+                    <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
+                    <tr><td id="last_year_str"></td><td id="last_year_download"></td></tr>
+                    <tr><td id="cur_year_percentage_str"></td><td id="cur_year_percentage"></td></tr>                    
+                  </table>
                 </div>
               </div>
             </div>
-
-        <img src="images/spinner.gif" id="spinner" style="position:absolute; right:150px; display:none;">
-        <button type="button" onclick="confirmPassword();" class="btn btn-primary">Submit</button>
-        </div>
-  </div>
-</div>
-
+            <div class="col-lg-4">
+              <div class="panel">
+                <div class="panel-body">col-lg-4</div>
+              </div>
             </div>
           </div>
 
-        </div><!--row end-->
+
+
+
+
+
+
+
+
+
+
+
       </div><!--scrollable wrapper end--> 
+
     </div><!--margin-container end--> 
   </div><!--main end--> 
 </div><!--layout-container end--> 

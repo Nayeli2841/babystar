@@ -10,7 +10,7 @@
 <link href="css/style-responsive.css" rel="stylesheet">
 <link href="css/atom-style.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" href="plugins/PCharts/style.css" type="text/css">
+<!-- <link rel="stylesheet" href="plugins/PCharts/style.css" type="text/css"> -->
 <link href="plugins/kalendar/kalendar.css" rel="stylesheet">
 
 
@@ -48,10 +48,12 @@
 
 <script src="js/jquery.bootpag.js" type="text/javascript" /></script>
 
+<script src="js/highcharts.js"></script>
+<script src="js/modules/exporting.js"></script>
 
 
 <script src="lib/js/wysihtml5-0.3.0.js"></script>
 <script src="lib/js/prettify.js"></script>
 <script src="src/bootstrap-wysihtml5.js"></script>
 <script src="js/jquery.fileupload.js"></script>
-
+<script src="js/highcharts-3d.js"></script>
