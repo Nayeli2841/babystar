@@ -11,6 +11,11 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+<script src="js/jquery-1.10.2.js"></script> 
+<script src="js/script.js"></script> 
+<script src="bs3/js/bootstrap.min.js"></script>
+<script src="js/jquery.bootpag.js"></script>
+
 
 <script>
 $( document ).ready(function() {
