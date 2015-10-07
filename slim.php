@@ -189,6 +189,12 @@ $app->group('/api', function () use ($app) {
         response($code['code'], array('data' => $code['data']));
     });
 
+    $app->get('/queries', function() use ($app){
+        $new = new QueriesRepo();
+        $code = $new->getQueries($app->requestdata);
+        response(200, array('data' => $code['data'], 'total_pages' => $code['total_pages']));
+        
+    });   
 
 });
 

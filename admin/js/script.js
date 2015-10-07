@@ -565,3 +565,64 @@ function resetPassword()
          });
   }
 }
+
+
+function getQueries(page)
+{
+    curpage = page;
+    if(page > 0)
+    page -= 1;
+
+    $.ajax({
+      type: 'GET',
+      url: apiUrl + 'queries',
+      dataType : "JSON",
+      data: {},
+      //async:sync,
+      beforeSend:function(){
+
+      },
+      success:function(data){
+        var html = '';
+        var options = '';
+        if(data.data.length > 0)
+        {       
+
+            $.each(data.data, function( index, value ) {
+             
+                html += '<tr>\
+                            <td>'+value.parent_name+'</td>\
+                            <td>'+value.child_name+'</td>\
+                            <td>'+value.dob+'</td>\
+                            <td>'+value.date_created+'</td>\
+                            <td>  <a href="javascript:void(0);" onclick="deleteQuery('+value.id+');">Delete</a></td>\
+                         </tr>';
+
+            });            
+        }
+        else
+        { 
+            html += '<tr>\
+                        <td colspan="5" align="center">Queries not found</td>\
+                     </tr>';            
+        }
+
+
+
+        $('#queriesbody').html(html);
+       // $('#cat_id').append(options);
+
+       $('#pagination').bootpag({
+            total: data.total_pages,          // total pages
+            page: page,            // default page
+            maxVisible: 5,     // visible pagination
+            leaps: true         // next/prev leaps through maxVisible
+        }).on("page", function(event, num){
+          getQueries(num);
+           });
+
+      },
+      error:function(jqxhr){
+      }
+    });
+}
