@@ -204,6 +204,14 @@ $app->group('/api', function () use ($app) {
         response($code, array());
     });
 
+    // Delete Query
+    $app->get('/querydetail', function() use ($app){
+
+        $new = new QueriesRepo();
+        $code = $new->QueryDetail($app->requestdata);
+        response($code, array());
+    });
+
 });
 
 

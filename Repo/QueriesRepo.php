@@ -150,6 +150,23 @@ class QueriesRepo
 		//return array('code' => '200','data' => $resp['data'], 'total_pages' => $resp['total_pages']);
 	}
 
+	public function queryDetail($request)
+	{
+		$resp = array();
+		$query = $GLOBALS['con']->from('queries')->where('id', $request['id']);
+		if(!empty($query))
+		{
+			foreach ($query as $key => $queries) 
+			{
+				$queries = array_map('utf8_encode', $queries);
+				$resp = $queries;
+			}
+		}
+		
+		var_dump($resp);
+		//return $resp;
+	}
+
 	// public function getSubscribers($request)
 	// {
 	// 	$sortBy = 'id';
