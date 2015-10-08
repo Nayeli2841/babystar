@@ -566,6 +566,7 @@ function resetPassword()
   }
 }
 
+
 function deleteQuery(id)
 {
     $.ajax({
@@ -583,6 +584,11 @@ function deleteQuery(id)
       error:function(jqxhr){
       }
     });
+}
+
+function showDelPopup(id)
+{
+  $('#delete').attr('onclick', 'deleteQuery(id)');
 }
 
 function getQueries(page)
@@ -613,7 +619,7 @@ function getQueries(page)
                             <td>'+value.child_name+'</td>\
                             <td>'+value.dob+'</td>\
                             <td>'+value.date_created+'</td>\
-                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="confirm" >Delete</a></td>\
+                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')">Delete</a></td>\
                          </tr>';
 
             });            

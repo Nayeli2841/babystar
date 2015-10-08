@@ -209,7 +209,7 @@ $app->group('/api', function () use ($app) {
 
         $new = new QueriesRepo();
         $code = $new->QueryDetail($app->requestdata);
-        response($code, array());
+        response(200, array('data' => $code));
     });
 
 });

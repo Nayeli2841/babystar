@@ -87,7 +87,7 @@
       <div class="modal-footer">
 
       <img src="images/spinner.gif" id="del_spinner" style="display:none;">
-      <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete" onclick="deleteQuery();">Yes</button>
+      <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete" >Yes</button>
       <button type="button" data-dismiss="modal" class="btn">No</button>
  
       </div>

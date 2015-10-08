@@ -163,8 +163,8 @@ class QueriesRepo
 			}
 		}
 		
-		var_dump($resp);
-		//return $resp;
+		//var_dump($resp);
+		return $resp;
 	}
 
 	// public function getSubscribers($request)
