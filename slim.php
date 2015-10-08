@@ -189,6 +189,28 @@ $app->group('/api', function () use ($app) {
         response($code['code'], array('data' => $code['data']));
     });
 
+    $app->get('/queries', function() use ($app){
+        $new = new QueriesRepo();
+        $code = $new->getQueries($app->requestdata);
+        response(200, array('data' => $code['data'], 'total_pages' => $code['total_pages']));
+        
+    });   
+
+    // Delete Query
+    $app->post('/deletequery', function() use ($app){
+
+        $new = new QueriesRepo();
+        $code = $new->deleteQuery($app->requestdata);
+        response($code, array());
+    });
+
+    // Delete Query
+    $app->get('/querydetail', function() use ($app){
+
+        $new = new QueriesRepo();
+        $code = $new->QueryDetail($app->requestdata);
+        response($code, array());
+    });
 
 });
 

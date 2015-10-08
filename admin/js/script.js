@@ -678,3 +678,102 @@ function resetPassword()
          });
   }
 }
+
+function deleteQuery(id)
+{
+    $.ajax({
+      type: 'POST',
+      url: apiUrl + 'deletequery',
+      dataType : "JSON",
+      data: {id:id},
+      beforeSend:function(){
+
+      },
+      success:function(data){
+        showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+        getQueries();
+      },
+      error:function(jqxhr){
+      }
+    });
+}
+
+function getQueries(page)
+{
+    curpage = page;
+    if(page > 0)
+    page -= 1;
+
+    $.ajax({
+      type: 'GET',
+      url: apiUrl + 'queries',
+      dataType : "JSON",
+      data: {},
+      //async:sync,
+      beforeSend:function(){
+
+      },
+      success:function(data){
+        var html = '';
+        var options = '';
+        if(data.data.length > 0)
+        {       
+
+            $.each(data.data, function( index, value ) {
+             
+                html += '<tr>\
+                            <td>'+value.parent_name+'</td>\
+                            <td>'+value.child_name+'</td>\
+                            <td>'+value.dob+'</td>\
+                            <td>'+value.date_created+'</td>\
+                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="confirm" >Delete</a></td>\
+                         </tr>';
+
+            });            
+        }
+        else
+        { 
+            html += '<tr>\
+                        <td colspan="5" align="center">Queries not found</td>\
+                     </tr>';            
+        }
+
+
+
+        $('#queriesbody').html(html);
+       // $('#cat_id').append(options);
+
+       $('#pagination').bootpag({
+            total: data.total_pages,          // total pages
+            page: page,            // default page
+            maxVisible: 5,     // visible pagination
+            leaps: true         // next/prev leaps through maxVisible
+        }).on("page", function(event, num){
+          getQueries(num);
+           });
+
+      },
+      error:function(jqxhr){
+      }
+    });
+}
+
+function queryDetail(id)
+{
+  $('#confirmation_popup').show();
+  // $.ajax({
+  //     type: 'POST',
+  //     url: apiUrl + 'querydetail',
+  //     dataType : "JSON",
+  //     data: {id:id},
+  //     beforeSend:function(){
+
+  //     },
+  //     success:function(data){
+  //       //showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+  //       //getQueries();
+  //     },
+  //     error:function(jqxhr){
+  //     }
+  //   });
+}

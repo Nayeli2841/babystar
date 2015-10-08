@@ -19,7 +19,7 @@ class LoginRepo{
 			}
 			else
 			{
-				$response =400;
+				$response = 400;
 			}
 		}
 
