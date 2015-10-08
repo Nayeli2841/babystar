@@ -151,11 +151,11 @@ $( document ).ready(function() {
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Parent Name</th>
-                    <th>Child Name</th>
-                    <th>Age</th>
-                    <th>Date</th>
-                    <th>Actions</th>
+                    <td>Parent Name</td>
+                    <td>Child Name</td>
+                    <td>Age</td>
+                    <td>Date</td>
+                    <td>Actions</td>
                   </tr>
                 </thead>
                 <tbody id="queriesbody">

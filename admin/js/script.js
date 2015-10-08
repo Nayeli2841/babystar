@@ -679,6 +679,7 @@ function resetPassword()
   }
 }
 
+
 function deleteQuery(id)
 {
     $.ajax({
@@ -696,6 +697,17 @@ function deleteQuery(id)
       error:function(jqxhr){
       }
     });
+}
+
+function showDelPopup(id)
+{
+  var query_id = id;
+  $('#delete').attr('onclick', 'deleteQuery('+query_id+')');
+}
+
+function showQueryPopup(id)
+{
+  queryDetail(id);
 }
 
 function getQueries(page)
@@ -726,7 +738,7 @@ function getQueries(page)
                             <td>'+value.child_name+'</td>\
                             <td>'+value.dob+'</td>\
                             <td>'+value.date_created+'</td>\
-                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="confirm" >Delete</a></td>\
+                            <td> <a href="javascript:void(0);" data-toggle="modal" data-target="#query_detail" onclick="showQueryPopup('+value.id+')"> View </a> | <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')">Delete</a></td>\
                          </tr>';
 
             });            
@@ -760,20 +772,37 @@ function getQueries(page)
 
 function queryDetail(id)
 {
-  $('#confirmation_popup').show();
-  // $.ajax({
-  //     type: 'POST',
-  //     url: apiUrl + 'querydetail',
-  //     dataType : "JSON",
-  //     data: {id:id},
-  //     beforeSend:function(){
+  $.ajax({
+      type: 'GET',
+      url: apiUrl + 'querydetail',
+      dataType : "JSON",
+      data: {id:id},
+      beforeSend:function(){
 
-  //     },
-  //     success:function(data){
-  //       //showMsg('#jobmsg', 'Query deleted successfully.', 'green');
-  //       //getQueries();
-  //     },
-  //     error:function(jqxhr){
-  //     }
-  //   });
+      },
+        success:function(data){
+          
+          $('#parent_name').html(data.data.data.parent_name);
+          $('#child_name').html(data.data.data.child_name);
+          $('#dob').html(data.data.data.dob);
+          $('#file_name').html(data.data.data.filename);
+          $('#branch_office').html(data.data.data.branch_office);
+          $('#start_time').html(data.data.data.start_time);
+          $('#end_time').html(data.data.data.end_time);
+          $('#email').html(data.data.data.email);
+          $('#phone').html(data.data.data.phone);
+          $('#refer_by').html(data.data.data.refer_by);
+          $('#date_created').html(data.data.data.date_created);
+          var html = '';
+          $.each(data.data.services, function( index, value ) {
+              html += value.service+'<br>';
+
+            });   
+
+          $('#services').html(html);
+
+      },
+      error:function(jqxhr){
+      }
+    });
 }
