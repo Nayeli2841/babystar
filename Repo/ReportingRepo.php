@@ -51,7 +51,14 @@ class ReportingRepo{
 		// $toUpperDate = '2014-12-01';
 
 		$curMonthcomparison = $this->getDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
-		$monthlyBranchComparison = $this->getBranchDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
+		$monthlyBranchComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'branch_office');
+		$monthlyReferbyComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'refer_by');
+
+		$firstDayOfYear =  date('Y').'-01-01';
+		$otherBranches = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'branch_office');
+		$otherReferBy = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'refer_by');
+		$otherServices = $this->getOtherByType('2014-01-01', date('Y-m-d'), 'service');//$toLowerDate
+
 
 		// current month
 		$day = new DateTime('first day of this month');
@@ -66,21 +73,66 @@ class ReportingRepo{
 		$lastYearStart = $this->getFormattedDate($fromLowerDate);
 		$lastYearToday = $this->getFormattedDate($fromUpperDate);
 
-
 		$yearcomparison = $this->getDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
+		$yearlyBranchComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'branch_office');
+		$yearlyReferbyComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'refer_by');
+
+
 		return array('chart' => $finalData,
 					 'cur_month' => $curMonthcomparison, 
 					 'last_year' => $yearcomparison, 
 					 'cur_month_branch' => $monthlyBranchComparison,
+					 'cur_year_branch' => $yearlyBranchComparison,					 
+					 'cur_month_referby' => $monthlyReferbyComparison,
+					 'cur_year_referby' => $yearlyReferbyComparison,
 					 'cur_from' => $curStartMonth,
 					 'cur_to' => $curTodayMonth,
 					 'last_from' => $lastMonthStart,
 					 'last_to' => $lastMonthToday,
 					 'last_year_from' => $lastYearStart,
 					 'last_year_to' => $lastYearToday,
-
+					 'other_branches' => $otherBranches,
+					 'other_refer_by' => $otherReferBy,
+					 'other_services' => $otherServices,
 					 );
 		// print_r($yearsArr);
+	}
+
+	public function getOtherByType($fromDate, $toDate, $type)
+	{
+		$finalData = array();
+		if($type == 'branch_office')
+			$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromDate."'  AND  '".$toDate."' AND (branch_office != 'Escandon' AND branch_office != 'San Jeronimo' AND branch_office != 'San Angel') group by ".$type;
+		else if($type == 'refer_by')
+			$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromDate."'  AND  '".$toDate."' AND (refer_by != 'Google' AND refer_by != 'Recomendación' AND refer_by != 'Youtube' AND refer_by != 'Bing' AND refer_by != 'Facebook' AND refer_by != 'Publicidad exterior' AND refer_by != 'Otro - especificar:') group by ".$type;
+		else if($type == 'service')
+		{
+			$sql = "Select s.* from services as s, queries as q where (s.service != 'Estimulación Temprana' && s.service != 'Inglés' && s.service != 'Guarderia' && s.service != 'Guarderia Express' && s.service != 'Lactantes' && s.service != 'Maternal') AND q.id = s.query_id AND DATE(date_created) between '".$fromDate."'  AND  '".$toDate."'   group by s.service ";
+		}
+
+		$sth = $GLOBALS['pdo']->query($sql);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+
+		while ($row = $sth->fetch()) 
+		{
+			// if($type == 'services')
+			// {
+			// 	echo "<pre>";
+			// 	print_r($row);			
+			// }
+
+			if(isset($row[$type]))
+			{
+				if(!empty(trim($row[$type])))
+					$finalData[] = utf8_encode($row[$type]);				
+			}
+
+		}
+
+
+
+		return $finalData;
+
 	}
 
 	public function getFormattedDate($date)
@@ -119,26 +171,26 @@ class ReportingRepo{
 		 			 );
 	}
 
-	public function getBranchDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate)
+	public function getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, $type)
 	{
 		$finalData = array();
 		$finalBranches1 = array();
 		$finalBranches2 = array();		
-		$sql = "SELECT branch_office, COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by branch_office";
+		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by ".$type;
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while($row = $sth->fetch())
 		{
-			$finalBranches1[$row['branch_office']] = $row['downloads'];
+			$finalBranches1[$row[$type]] = $row['downloads'];
 		}
 
 
-		$sql = "SELECT branch_office, COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  group by branch_office";
+		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  group by ".$type;
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while($row = $sth->fetch())
 		{
-			$finalBranches2[$row['branch_office']] = $row['downloads'];
+			$finalBranches2[$row[$type]] = $row['downloads'];
 		}
 
 		$currentMonthstring = date('F-Y', strtotime($fromUpperDate));
@@ -169,7 +221,7 @@ class ReportingRepo{
 			foreach ($finalBranches2 as $singleBranch => $curDownloads) {
 				$lastDownlaods = $finalBranches1[$singleBranch];
 				$percentage = $this->getPercentage($curDownloads, $lastDownlaods);
-				$finalData[] = array('name' => utf8_encode($singleBranch), 'data' => array( (int) $lastDownlaods, (int) $curDownloads));
+				$finalData[] = array('name' => utf8_encode($singleBranch) . ' '.$percentage.'%', 'data' => array( (int) $lastDownlaods, (int) $curDownloads), 'real_name' => utf8_encode($singleBranch), 'downlaods' => $curDownloads);
 			}
 		}
 

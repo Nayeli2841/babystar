@@ -94,3 +94,85 @@
     </div>
   </div>
 </div>
+
+<div id="query_detail" class="modal fade" style="z-index:99999!important">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+
+
+
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel"> Query Details</h4>
+      </div>
+  
+      <div class="modal-body">
+        <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Parent Name</th>
+                    <td id="parent_name"></td>
+                  </tr>
+                  <tr>
+                    <th>Child Name</th>
+                    <td id="child_name"></td>
+                  </tr>
+                  <tr>
+                    <th>Age</th>
+                    <td id="dob"></td>
+                  </tr>
+                  <tr>
+                    <th>File Name</th>
+                    <td id="file_name"></td>
+                  </tr>
+                  <tr>
+                    <th>Branch Office</th>
+                    <td id="branch_office"></td>
+                  </tr>
+                  <tr>
+                    <th>Strat Time</th>
+                    <td id="start_time"></td>
+                  </tr>
+                  <tr>
+                    <th>End Time</th>
+                    <td id="end_time"></td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td id="email"></td>
+                  </tr>
+                  <tr>
+                    <th>Phone</th>
+                    <td id="phone"></td>
+                  </tr>
+                  <tr>
+                    <th>Refer By</th>
+                    <td id="refer_by"></td>
+                  </tr>
+                  <tr>
+                    <th>Date</th>
+                    <td id="date_created"></td>
+                  </tr>
+                  <tr>
+                    <th>Services</th>
+                    <td id="services"></td>
+                  </tr>
+
+                </thead>
+                <tbody id="detail">
+
+                </tbody>
+              </table>
+
+      </div>
+      
+      <!-- dialog buttons -->
+      <div class="modal-footer">
+
+      <img src="images/spinner.gif" id="del_spinner" style="display:none;">
+ 
+      </div>
+    </div>
+  </div>
+</div>

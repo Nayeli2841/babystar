@@ -104,8 +104,19 @@ function getReportingData()
           $('#cur_year_percentage_str').html(curPercentageStr);          
         }
 
+        //Other branches
+        var otherBranches = '';
+        $.each(data.data.other_branches, function( index, value ) {
+          otherBranches += value + '<br>';
+        });
 
+        $('#readmore').html(otherBranches);
 
+        $('#readmore').readmore({
+          speed: 75,
+          lessLink: '<a href="#" style="margin-left:245px;">Read less</a>',
+          moreLink: '<a href="#" style="margin-left:245px;">More branches</a>'
+        });
 
 
 
@@ -115,11 +126,11 @@ function getReportingData()
   // Set up the chart
     var chart = new Highcharts.Chart({
         xAxis: {
-            categories: ['Downloads (Last month)', 'Downloads (Current month)'],
+            categories: ['Downloads (Last month)', 'Downloads (this month)'],
             id: 'x-axis'
         },      
         chart: {
-            renderTo: 'branch_container',
+            renderTo: 'branch_month_container',
             type: 'column',
             margin: 75,
             options3d: {
@@ -148,8 +159,110 @@ function getReportingData()
         series: data.data.cur_month_branch
     });
 
+    var chart = new Highcharts.Chart({
+        xAxis: {
+            categories: ['Downloads (Last year)', 'Downloads (this year)'],
+            id: 'x-axis'
+        },      
+        chart: {
+            renderTo: 'branch_year_container',
+            type: 'column',
+            margin: 75,
+            options3d: {
+                enabled: false,
+                alpha: 0,
+                beta: 0,
+                depth: 50,
+                viewDistance: 25
+            }
+        },
+        title: {
+            text: 'Downloads by branch (Last year comparison)'
+        },
+        subtitle: {
+            text: data.data.last_from + ' - ' + data.data.last_to + ' | ' + data.data.cur_from + ' - ' + data.data.cur_to
+        },
+        plotOptions: {
+            column: {
+                depth: 0
+            }
+        },
+       tooltip: {
+            headerFormat: '',
+            pointFormat: ' {point.y} Downloads'
+        },        
+        series: data.data.cur_year_branch
+    });
 
+    var chart = new Highcharts.Chart({
+        xAxis: {
+            categories: ['Downloads (Last month)', 'Downloads (this month)'],
+            id: 'x-axis'
+        },      
+        chart: {
+            renderTo: 'referby_month_container',
+            type: 'column',
+            margin: 75,
+            options3d: {
+                enabled: false,
+                alpha: 0,
+                beta: 0,
+                depth: 50,
+                viewDistance: 25
+            }
+        },
+        title: {
+            text: 'Downloads by referral (Last month comparison)'
+        },
+        subtitle: {
+            text: data.data.last_from + ' - ' + data.data.last_to + ' | ' + data.data.cur_from + ' - ' + data.data.cur_to
+        },
+        plotOptions: {
+            column: {
+                depth: 0
+            }
+        },
+       tooltip: {
+            headerFormat: '',
+            pointFormat: ' {point.y} Downloads'
+        },        
+        series: data.data.cur_month_referby
+    });
 
+    var chart = new Highcharts.Chart({
+        xAxis: {
+            categories: ['Downloads (Last year)', 'Downloads (this year)'],
+            id: 'x-axis'
+        },      
+        chart: {
+            renderTo: 'referby_year_container',
+            type: 'column',
+            margin: 75,
+            options3d: {
+                enabled: false,
+                alpha: 0,
+                beta: 0,
+                depth: 50,
+                viewDistance: 25
+            }
+        },
+        title: {
+            text: 'Downloads by referral (Last year comparison)'
+        },
+        subtitle: {
+            text: data.data.last_from + ' - ' + data.data.last_to + ' | ' + data.data.cur_from + ' - ' + data.data.cur_to
+        },
+        plotOptions: {
+            column: {
+                depth: 0
+            }
+        },
+       tooltip: {
+            headerFormat: '',
+            pointFormat: ' {point.y} Downloads'
+        },        
+        series: data.data.cur_year_referby
+    });
 
 
 
@@ -588,7 +701,13 @@ function deleteQuery(id)
 
 function showDelPopup(id)
 {
-  $('#delete').attr('onclick', 'deleteQuery(id)');
+  var query_id = id;
+  $('#delete').attr('onclick', 'deleteQuery('+query_id+')');
+}
+
+function showQueryPopup(id)
+{
+  queryDetail(id);
 }
 
 function getQueries(page)
@@ -619,7 +738,7 @@ function getQueries(page)
                             <td>'+value.child_name+'</td>\
                             <td>'+value.dob+'</td>\
                             <td>'+value.date_created+'</td>\
-                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')">Delete</a></td>\
+                            <td> <a href="javascript:void(0);" data-toggle="modal" data-target="#query_detail" onclick="showQueryPopup('+value.id+')"> View </a> | <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')">Delete</a></td>\
                          </tr>';
 
             });            
@@ -653,20 +772,37 @@ function getQueries(page)
 
 function queryDetail(id)
 {
-  $('#confirmation_popup').show();
-  // $.ajax({
-  //     type: 'POST',
-  //     url: apiUrl + 'querydetail',
-  //     dataType : "JSON",
-  //     data: {id:id},
-  //     beforeSend:function(){
+  $.ajax({
+      type: 'GET',
+      url: apiUrl + 'querydetail',
+      dataType : "JSON",
+      data: {id:id},
+      beforeSend:function(){
 
-  //     },
-  //     success:function(data){
-  //       //showMsg('#jobmsg', 'Query deleted successfully.', 'green');
-  //       //getQueries();
-  //     },
-  //     error:function(jqxhr){
-  //     }
-  //   });
+      },
+        success:function(data){
+          
+          $('#parent_name').html(data.data.data.parent_name);
+          $('#child_name').html(data.data.data.child_name);
+          $('#dob').html(data.data.data.dob);
+          $('#file_name').html(data.data.data.filename);
+          $('#branch_office').html(data.data.data.branch_office);
+          $('#start_time').html(data.data.data.start_time);
+          $('#end_time').html(data.data.data.end_time);
+          $('#email').html(data.data.data.email);
+          $('#phone').html(data.data.data.phone);
+          $('#refer_by').html(data.data.data.refer_by);
+          $('#date_created').html(data.data.data.date_created);
+          var html = '';
+          $.each(data.data.services, function( index, value ) {
+              html += value.service+'<br>';
+
+            });   
+
+          $('#services').html(html);
+
+      },
+      error:function(jqxhr){
+      }
+    });
 }

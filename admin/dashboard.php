@@ -44,7 +44,11 @@ $(function () {
         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 
-        <div id="branch_container"></div>
+        <div id="branch_month_container" style="margin-top:10px;"></div>
+        <div id="branch_year_container" style="margin-top:10px;"></div>
+
+        <div id="referby_month_container" style="margin-top:10px;"></div>
+        <div id="referby_year_container" style="margin-top:10px;"></div>
 
 
 
@@ -52,10 +56,13 @@ $(function () {
 
           <div class="row" style="margin-top:10px;">
             <div class="col-lg-4">
-              <div class="panel">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Downloads in this month</h3>
+                </div>
                 <div class="panel-body">
                   <table class="table">
-                    <thead><th style="text-align:center;" colspan="2">Downloads in current month</th></tr>
+                    <thead>
                     <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
                     <tr><td id="last_month_str"></td><td id="last_month_download"></td></tr>
                     <tr><td id="cur_percentage_str"></td><td id="cur_percentage"></td></tr>                    
@@ -64,10 +71,13 @@ $(function () {
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="panel">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Downloads in this year</h3>
+                </div>
                 <div class="panel-body">
                   <table class="table">
-                    <thead><th style="text-align:center;" colspan="2">Downloads in current year</th></tr>
+                    <thead>                  
                     <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
                     <tr><td id="last_year_str"></td><td id="last_year_download"></td></tr>
                     <tr><td id="cur_year_percentage_str"></td><td id="cur_year_percentage"></td></tr>                    
@@ -76,9 +86,61 @@ $(function () {
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="panel">
-                <div class="panel-body">col-lg-4</div>
+
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Other branches</h3>
+                </div>
+                <div class="panel-body" id="readmore">
+                </div>
               </div>
+
+
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="col-lg-4">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Downloads in this month</h3>
+                </div>
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                    <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
+                    <tr><td id="last_month_str"></td><td id="last_month_download"></td></tr>
+                    <tr><td id="cur_percentage_str"></td><td id="cur_percentage"></td></tr>                    
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Downloads in this year</h3>
+                </div>
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>                  
+                    <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
+                    <tr><td id="last_year_str"></td><td id="last_year_download"></td></tr>
+                    <tr><td id="cur_year_percentage_str"></td><td id="cur_year_percentage"></td></tr>                    
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Other branches</h3>
+                </div>
+                <div class="panel-body" id="readmore">
+                </div>
+              </div>
+
+
             </div>
           </div>
 

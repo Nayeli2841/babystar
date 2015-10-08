@@ -153,7 +153,17 @@ class QueriesRepo
 	public function queryDetail($request)
 	{
 		$resp = array();
+		$data = array();
 		$query = $GLOBALS['con']->from('queries')->where('id', $request['id']);
+		$sql = $GLOBALS['con']->from('services')->where('query_id', $request['id']);
+		if(!empty($sql))
+		{
+			foreach ($sql as $key => $services) 
+			{
+				$services = array_map('utf8_encode', $services);
+				$data[] = $services;
+			}
+		}
 		if(!empty($query))
 		{
 			foreach ($query as $key => $queries) 
@@ -162,9 +172,8 @@ class QueriesRepo
 				$resp = $queries;
 			}
 		}
-		
-		//var_dump($resp);
-		return $resp;
+
+		return array('code' => 200, 'data' => $resp, 'services' => $data);
 	}
 
 	// public function getSubscribers($request)
