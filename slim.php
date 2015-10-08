@@ -208,8 +208,8 @@ $app->group('/api', function () use ($app) {
     $app->get('/querydetail', function() use ($app){
 
         $new = new QueriesRepo();
-        $code = $new->QueryDetail($app->requestdata);
-        response($code, array());
+        $data = $new->QueryDetail($app->requestdata);
+        response($data['code'], array('data' => $data['data']));
     });
 
 });
