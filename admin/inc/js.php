@@ -57,3 +57,5 @@
 <script src="src/bootstrap-wysihtml5.js"></script>
 <script src="js/jquery.fileupload.js"></script>
 <script src="js/highcharts-3d.js"></script>
+<script src="js/readmore.js"></script>
+
