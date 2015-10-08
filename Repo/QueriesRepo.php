@@ -108,6 +108,7 @@ class QueriesRepo
 	public function deleteQuery($request)
 	{
 		$query = $GLOBALS['con']->deleteFrom('queries')->where('id', $request['id'])->execute();
+		$sql   = $GLOBALS['con']->deleteFrom('services')->where('query_id', $request['id'])->execute();
 		return 200;
 	}
 
@@ -133,7 +134,7 @@ class QueriesRepo
 	
 		$total_pages = ceil($count / $limit) ;	
 	
-			$queries = $GLOBALS['con']->from('queries')->limit($limit)->offset($offset);
+		$queries = $GLOBALS['con']->from('queries')->limit($limit)->offset($offset);
 		
 		if(!empty($queries))
 		{
@@ -147,6 +148,23 @@ class QueriesRepo
 
 		return $resp;
 		//return array('code' => '200','data' => $resp['data'], 'total_pages' => $resp['total_pages']);
+	}
+
+	public function queryDetail($request)
+	{
+		$resp = array();
+		$query = $GLOBALS['con']->from('queries')->where('id', $request['id']);
+		if(!empty($query))
+		{
+			foreach ($query as $key => $queries) 
+			{
+				$queries = array_map('utf8_encode', $queries);
+				$resp = $queries;
+			}
+		}
+		
+		var_dump($resp);
+		//return $resp;
 	}
 
 	// public function getSubscribers($request)

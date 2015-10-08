@@ -65,3 +65,32 @@
       </li> -->
     </ul><!--navigation end--> 
   </div><!--Left navbar end--> 
+
+
+  <div id="confirm" class="modal fade" style="z-index:99999!important">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+
+
+
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+      </div>
+  
+      <div class="modal-body">
+          <p>Are you sure?</p>
+      </div>
+      
+      <!-- dialog buttons -->
+      <div class="modal-footer">
+
+      <img src="images/spinner.gif" id="del_spinner" style="display:none;">
+      <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete" onclick="deleteQuery();">Yes</button>
+      <button type="button" data-dismiss="modal" class="btn">No</button>
+ 
+      </div>
+    </div>
+  </div>
+</div>

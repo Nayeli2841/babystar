@@ -196,6 +196,22 @@ $app->group('/api', function () use ($app) {
         
     });   
 
+    // Delete Query
+    $app->post('/deletequery', function() use ($app){
+
+        $new = new QueriesRepo();
+        $code = $new->deleteQuery($app->requestdata);
+        response($code, array());
+    });
+
+    // Delete Query
+    $app->get('/querydetail', function() use ($app){
+
+        $new = new QueriesRepo();
+        $code = $new->QueryDetail($app->requestdata);
+        response($code, array());
+    });
+
 });
 
 

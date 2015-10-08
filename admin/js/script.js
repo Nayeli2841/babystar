@@ -566,6 +566,24 @@ function resetPassword()
   }
 }
 
+function deleteQuery(id)
+{
+    $.ajax({
+      type: 'POST',
+      url: apiUrl + 'deletequery',
+      dataType : "JSON",
+      data: {id:id},
+      beforeSend:function(){
+
+      },
+      success:function(data){
+        showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+        getQueries();
+      },
+      error:function(jqxhr){
+      }
+    });
+}
 
 function getQueries(page)
 {
@@ -595,7 +613,7 @@ function getQueries(page)
                             <td>'+value.child_name+'</td>\
                             <td>'+value.dob+'</td>\
                             <td>'+value.date_created+'</td>\
-                            <td>  <a href="javascript:void(0);" onclick="deleteQuery('+value.id+');">Delete</a></td>\
+                            <td>  <a href="javascript:void(0);" data-toggle="modal" data-target="confirm" >Delete</a></td>\
                          </tr>';
 
             });            
@@ -625,4 +643,24 @@ function getQueries(page)
       error:function(jqxhr){
       }
     });
+}
+
+function queryDetail(id)
+{
+  $('#confirmation_popup').show();
+  // $.ajax({
+  //     type: 'POST',
+  //     url: apiUrl + 'querydetail',
+  //     dataType : "JSON",
+  //     data: {id:id},
+  //     beforeSend:function(){
+
+  //     },
+  //     success:function(data){
+  //       //showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+  //       //getQueries();
+  //     },
+  //     error:function(jqxhr){
+  //     }
+  //   });
 }
