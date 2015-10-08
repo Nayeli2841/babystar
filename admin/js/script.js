@@ -566,6 +566,24 @@ function resetPassword()
   }
 }
 
+function deleteQuery(id)
+{
+    $.ajax({
+      type: 'POST',
+      url: apiUrl + 'deletequery',
+      dataType : "JSON",
+      data: {id:id},
+      beforeSend:function(){
+
+      },
+      success:function(data){
+        showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+        getQueries();
+      },
+      error:function(jqxhr){
+      }
+    });
+}
 
 function getQueries(page)
 {
@@ -626,3 +644,5 @@ function getQueries(page)
       }
     });
 }
+
+
