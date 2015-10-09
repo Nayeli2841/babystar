@@ -783,12 +783,12 @@ function queryDetail(id)
           
           $('#parent_name').html(data.data.data.parent_name);
           $('#child_name').html(data.data.data.child_name);
-          var dob = data.data.data.dob;
-          dob= dob.format("dd-mm-yy");
-          $('#dob').html(dob);
+          $('#dob').html(data.data.data.dob);
           if(data.data.data.import == '1')
           {
-            $('#file_name').html(data.data.data.filename);
+            var file = '<a href="email/'+data.data.data.filename+'" target="_blank" >'+data.data.data.filename+' </a>';
+            //var filename = "<a href="admin/email/"+"data.data.data.filename+" target="_blank">data.data.data.filename</a>";
+            $('#file_name').html(file);
           }
           else
           {
