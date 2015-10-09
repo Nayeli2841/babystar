@@ -863,6 +863,7 @@ function queryDetail(id)
 
           // $('#services').html(html);
 
+
       },
       error:function(jqxhr){
       }
