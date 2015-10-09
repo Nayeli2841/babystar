@@ -107,8 +107,8 @@
           <h4 class="modal-title" id="myModalLabel"> Query Details</h4>
       </div>
   
-      <div class="modal-body">
-        <table class="table table-bordered">
+      <div class="modal-body" id="detail_query_body">
+<!--         <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th>Parent Name</th>
@@ -167,7 +167,7 @@
                 <tbody id="detail">
 
                 </tbody>
-              </table>
+              </table> -->
 
       </div>
       

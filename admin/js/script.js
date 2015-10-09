@@ -832,35 +832,36 @@ function queryDetail(id)
 
       },
         success:function(data){
-          
-          $('#parent_name').html(data.data.data.parent_name);
-          $('#child_name').html(data.data.data.child_name);
-          var dob = data.data.data.dob;
-          dob= dob.format("dd-mm-yy");
-          $('#dob').html(dob);
-          if(data.data.data.import == '1')
-          {
-            $('#file_name').html(data.data.data.filename);
-          }
-          else
-          {
-            $('#filename').hide();
-          }
-          //$('#file_name').html(data.data.data.filename);
-          $('#branch_office').html(data.data.data.branch_office);
-          $('#start_time').html(data.data.data.start_time);
-          $('#end_time').html(data.data.data.end_time);
-          $('#email').html(data.data.data.email);
-          $('#phone').html(data.data.data.phone);
-          $('#refer_by').html(data.data.data.refer_by);
-          $('#date_created').html(data.data.data.date_created);
-          var html = '';
-          $.each(data.data.services, function( index, value ) {
-              html += value.service+'<br>';
+            
+          $('#detail_query_body').html(data);
+          // $('#parent_name').html(data.data.data.parent_name);
+          // $('#child_name').html(data.data.data.child_name);
+          // var dob = data.data.data.dob;
+          // //dob= dob.format("dd-mm-yy");
+          // //$('#dob').html(dob);
+          // if(data.data.data.import == '1')
+          // {
+          //   $('#file_name').html(data.data.data.filename);
+          // }
+          // else
+          // {
+          //   $('#filename').hide();
+          // }
+          // //$('#file_name').html(data.data.data.filename);
+          // $('#branch_office').html(data.data.data.branch_office);
+          // $('#start_time').html(data.data.data.start_time);
+          // $('#end_time').html(data.data.data.end_time);
+          // $('#email').html(data.data.data.email);
+          // $('#phone').html(data.data.data.phone);
+          // $('#refer_by').html(data.data.data.refer_by);
+          // $('#date_created').html(data.data.data.date_created);
+          // var html = '';
+          // $.each(data.data.services, function( index, value ) {
+          //     html += value.service+'<br>';
 
-            });   
+          //   });   
 
-          $('#services').html(html);
+          // $('#services').html(html);
 
       },
       error:function(jqxhr){
