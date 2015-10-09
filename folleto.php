@@ -12,6 +12,8 @@
 
     <link href="asset/css/bootstrap.min.css" rel="stylesheet">
     <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/css/bootstrap-datepicker.css" rel="stylesheet">
+
     <link href="asset/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="asset/css/font-awesome.css" rel="stylesheet">
     <link href="asset/css/build.css" rel="stylesheet">
@@ -20,6 +22,9 @@
     <script src="asset/js/bootstrap.min.js"></script>
     <script src="asset/js/scripts.js"></script>
     <script src="asset/js/bootstrap-select.js"></script>
+    <script src="asset/js/bootstrap-datepicker.js"></script>
+    <script src="asset/locales/bootstrap-datepicker.es.min.js"></script>
+
     <script type="text/javascript">
       function changeReferBy(curValue)
       {
@@ -48,7 +53,10 @@
 
 
       $( document ).ready(function() {
-        // Handler for .ready() called.
+        $('#dob').datepicker({
+            language: "es",
+            autoclose: true
+        });        
       });
 
       function validateEmail(email) {
@@ -60,9 +68,7 @@
       {
       	var name 			= $.trim($('#parent_name').val());
       	var child_name 		= $.trim($('#child_name').val());
-      	var years 			= $.trim($('#years').val());
-      	var months 			= $.trim($('#months').val());
-      	var days 			= $.trim($('#days').val());
+      	var dob 			= $.trim($('#dob').val());
       	var branch_office 	= $.trim($('#branch_office').val());
         var branch_office_other  = $.trim($('#branch_office_other').val());
       	var start_time 		= $.trim($('#start_time').val());
@@ -101,11 +107,11 @@
       		check = false;
       	}
 
-      	if(years == '' && months == '' && days == '')
+      	if(dob == '')
       	{
-      		$('#age_div').addClass('has-error');
+      		$('#dob').addClass('has-error');
           if(check)
-            $('#years').focus();
+            $('#dob').focus();
       		check = false;
       	}
 
@@ -187,19 +193,23 @@
 
         if(check)
         {
+          $('#query_spinner').show();
           $.ajax({
               type: 'post',
               url: 'api/query',
               dataType : "JSON",
-              data: {parent_name:name, child_name:child_name, years:years, months:months, days:days, branch_office:branch_office, branch_office_other:branch_office_other, start_time:start_time, end_time:end_time, phone:phone, email:email, refer_by:refer_to, refery_by_other: refer_to_other, services:services},
+              data: {parent_name:name, child_name:child_name, dob:dob, branch_office:branch_office, branch_office_other:branch_office_other, start_time:start_time, end_time:end_time, phone:phone, email:email, refer_by:refer_to, refery_by_other: refer_to_other, services:services},
               beforeSend:function(){
 
               },
               success:function(data){
-                showMsg('#jobmsg', 'Query deleted successfully.', 'green');
-                getQueries();
+                if(data.status == 'success')
+                {
+                  window.location = 'descarga-folleto.php';
+                }
               },
               error:function(jqxhr){
+                $('#query_spinner').hide();                
               }
             });
         }
@@ -314,13 +324,11 @@ function checkLoginState(){
 					<div class="form-group" id="age_div">
 					 
 					<label for="age" class="col-sm-4 control-label">
-						Age
+						Date of birth
 					</label>
 					<div class="col-sm-2">
-<!-- 					<label for="age" class="col-sm-2 control-label">
-						Years
-					</label> -->
-					<select class="selectpicker" data-width="100%" id="years" onchange="$('#age_div').removeClass('has-error');">
+          <input type="text" id="dob" class="form-control">
+					<!-- <select class="selectpicker" data-width="100%" id="years" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Years</option>
    						 <option value="0">0</option>
    						 <option value="1">1</option>
@@ -329,9 +337,6 @@ function checkLoginState(){
   					</select>
   					</div>
   					<div class="col-sm-2">
-<!--   					<label for="age" class="col-sm-2 control-label">
-						Months
-					</label> -->
 					<select class="selectpicker" id="months"  data-width="100%" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Months</option>
    						 <option value="0">0</option>
@@ -349,9 +354,9 @@ function checkLoginState(){
   					</select>
   					</div>
   					<div class="col-sm-2">
-<!--   					<label for="age" class="col-sm-2 control-label">
+  					<label for="age" class="col-sm-2 control-label">
 						Days
-					</label> -->
+					</label>
   					<select class="selectpicker" id="days" data-width="100%" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Days</option>
    						 <option value="0">0</option>
@@ -385,7 +390,7 @@ function checkLoginState(){
    						 <option value="28">28</option>
    						 <option value="29">29</option>
    						 <option value="30">30</option>
-  					</select>
+  					</select> -->
   					</div>
 				</div>
 				
@@ -568,6 +573,8 @@ function checkLoginState(){
 						<button type="button" class="btn btn-primary" onClick="validation();">
 							Download Brochure
 						</button>
+
+            <img id="query_spinner" src="asset/images/spinner.gif" style="display:none;">
 					</div>
 				</div>
 			</form>

@@ -252,6 +252,20 @@ class QueriesRepo
 		return $dob;
 	}
 
+
+	public function addServices($queryId, $services)
+	{
+		$deleteService = $GLOBALS['con']->deleteFrom('services')->where('query_id', $queryId)->execute();
+		if(!empty($services))
+		{
+			foreach ($services as $key => $service) 
+			{
+				$values = array('service' => $service, 'query_id' => $queryId);
+				$query = $GLOBALS['con']->insertInto('services', $values)->execute();
+			}
+		}	
+	}
+
 	public function saveQuery($request)
 	{
 		if($request['branch_office'] == 'other')
@@ -261,7 +275,7 @@ class QueriesRepo
 			$request['refer_by'] = $request['refery_by_other'];
 		
 		$dateCreated = date('Y-m-d');
-		$dob = $this->getDob($dateCreated, $request['years'], $request['months'], $request['days']);
+		$dob = date('Y-m-d', strtotime($request['dob']));
 
 		$values = array('filename' => '',
 						'parent_name' => $request['parent_name'],
@@ -276,9 +290,43 @@ class QueriesRepo
 						'import' => 0,
 						'date_created' => $dateCreated,
 						);
-		$query = $GLOBALS['con']->insertInto('queries', $values)->execute();
+
+		if(!empty($request['id']))
+		{
+			$queryId = $request['id'];
+			$query = $GLOBALS['con']->update('queries', $values, $request['id'])->execute();
+		}
+		else
+		{
+			$queryId = $GLOBALS['con']->insertInto('queries', $values)->execute();
+
+			// send email to admin
+			$this->sendMailAdmin();
+
+			// send email to admin
+			$this->sendMailUser($request['email']);
+
+		}
+
+		// add services
+		$this->addServices($queryId, $request['services']);
+
+		return 'success';
+	}
+
+	public function sendMailAdmin()
+	{
 
 	}
+
+	public function sendMailUser($to)
+	{
+		$subject = "Saludos!";
+		$txt = file_get_contents(str_replace('Repo', '', __DIR__.'/admin/mail.html'));
+		$headers = "From: jasonbourne501@gmail.com";
+		mail($to,$subject,$txt,$headers);
+	}
+
 	// public function getSubscribers($request)
 	// {
 	// 	$sortBy = 'id';

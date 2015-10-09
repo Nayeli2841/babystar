@@ -152,7 +152,7 @@ $app->group('/api', function () use ($app) {
 
     $app->post('/query', function() use ($app){
         $new = new QueriesRepo();
-        $code = $new->saveQuery($app->requestdata);
+        $status = $new->saveQuery($app->requestdata);
         response(200, array('status' => $status));
     });
 
