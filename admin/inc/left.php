@@ -119,10 +119,14 @@
                     <td id="child_name"></td>
                   </tr>
                   <tr>
-                    <th>Age</th>
+                    <th>Date Of Birth</th>
                     <td id="dob"></td>
                   </tr>
                   <tr>
+                    <th>Age</th>
+                    <td id="age"></td>
+                  </tr>
+                  <tr id="filename">
                     <th>File Name</th>
                     <td id="file_name"></td>
                   </tr>
@@ -151,11 +155,11 @@
                     <td id="refer_by"></td>
                   </tr>
                   <tr>
-                    <th>Date</th>
+                    <th>Date Created</th>
                     <td id="date_created"></td>
                   </tr>
                   <tr>
-                    <th>Services</th>
+                    <th style="vertical-align: top;">Services</th>
                     <td id="services"></td>
                   </tr>
 
@@ -171,6 +175,7 @@
       <div class="modal-footer">
 
       <img src="images/spinner.gif" id="del_spinner" style="display:none;">
+      <button type="button" data-dismiss="modal" class="btn">No</button>
  
       </div>
     </div>
