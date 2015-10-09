@@ -153,12 +153,14 @@ class QueriesRepo
 	public function getQueryDetail($request)
 	{
 		$data = $this->QueryDetail($request);
+		$data1 = $data['data'];
+		var_dump($data1['parent_name']);
 
 		$queryDataStr = '<table class="table table-bordered">
                 <thead>
                   <tr>
                     <th>Parent Name</th>
-                    <td id="parent_name">Ingreed Castro</td>
+                    <td id="parent_name"><?php echo 'abc'; ?></td>
                   </tr>
                   <tr>
                     <th>Child Name</th>
