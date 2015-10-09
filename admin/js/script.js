@@ -827,7 +827,6 @@ function queryDetail(id)
   $.ajax({
       type: 'GET',
       url: apiUrl + 'querydetail',
-      dataType : "JSON",
       data: {id:id},
       beforeSend:function(){
 
@@ -836,8 +835,18 @@ function queryDetail(id)
           
           $('#parent_name').html(data.data.data.parent_name);
           $('#child_name').html(data.data.data.child_name);
-          $('#dob').html(data.data.data.dob);
-          $('#file_name').html(data.data.data.filename);
+          var dob = data.data.data.dob;
+          dob= dob.format("dd-mm-yy");
+          $('#dob').html(dob);
+          if(data.data.data.import == '1')
+          {
+            $('#file_name').html(data.data.data.filename);
+          }
+          else
+          {
+            $('#filename').hide();
+          }
+          //$('#file_name').html(data.data.data.filename);
           $('#branch_office').html(data.data.data.branch_office);
           $('#start_time').html(data.data.data.start_time);
           $('#end_time').html(data.data.data.end_time);
