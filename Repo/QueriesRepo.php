@@ -154,57 +154,71 @@ class QueriesRepo
 	{
 		$data = $this->QueryDetail($request);
 		$data1 = $data['data'];
-		var_dump($data1['parent_name']);
+
+		$dob = strtotime($data1['dob']);
+		$dob = date('j M Y',$dob);
+
+		$date_created = strtotime($data1['date_created']);
+		$date_created = date('j M Y',$date_created);
+
+		$age = date_diff(date_create($data1['dob']), date_create('now'));
+		$age = $age->format("%Y Year, %M Months, %d Days");
 
 		$queryDataStr = '<table class="table table-bordered">
                 <thead>
                   <tr>
                     <th>Parent Name</th>
-                    <td id="parent_name"><?php echo '.$data1['parent_name'].'; ?></td>
+                    <td id="parent_name">'.$data1['parent_name'].'</td>
                   </tr>
                   <tr>
                     <th>Child Name</th>
-                    <td id="child_name">Madeline Sanchez</td>
+                    <td id="child_name">'.$data1['child_name'].'</td>
                   </tr>
                   <tr>
                     <th>Date Of Birth</th>
-                    <td id="dob"></td>
+                    <td id="dob">'.$dob.'</td>
                   </tr>
                   <tr>
                     <th>Age</th>
-                    <td id="age"></td>
+                    <td id="age">'.$age.'</td>
                   </tr>
-                  <tr id="filename">
-                    <th>File Name</th>
-                    <td id="file_name">12444.emlx</td>
-                  </tr>
+                  <?php
+	                  if('.$data1['import'].' == 1)
+	                  {
+	                  	<tr id="filename">
+	                    <th>File Name</th>
+	                    <td id="file_name"><a href = "email/'.$data1['filename'].'" target="_blank" >'.$data1['filename'].'</td>
+	                  	</tr>
+	                  }
+                  ?>
                   <tr>
                     <th>Branch Office</th>
-                    <td id="branch_office">Condesa</td>
+                    <td id="branch_office">'.$data1['branch_office'].'</td>
                   </tr>
                   <tr>
                     <th>Strat Time</th>
-                    <td id="start_time">10:00:00</td>
+                    <td id="start_time">'.$data1['start_time'].'</td>
                   </tr>
                   <tr>
                     <th>End Time</th>
-                    <td id="end_time">16:00:00</td>
+                    <td id="end_time">'.$data1['end_time'].'</td>
                   </tr>
                   <tr>
                     <th>Email</th>
-                    <td id="email">pamcastro.77@gmail.com</td>
+                    <td id="email">'.$data1['email'].'</td>
                   </tr>
                   <tr>
                     <th>Phone</th>
-                    <td id="phone">5527443787</td>
+                    <td id="phone">'.$data1['phone'].'</td>
                   </tr>
                   <tr>
                     <th>Refer By</th>
-                    <td id="refer_by">Recomendación</td>
+                    <td id="refer_by">'.$data1['refer_by'].'</td>
                   </tr>
                   <tr>
                     <th>Date Created</th>
-                    <td id="date_created">2014-09-30 00:00:00</td>
+                    <td id="date_created">'.$date_created.'<tr>
+                  </tr>
                   </tr>
                   <tr>
                     <th style="vertical-align: top;">Services</th>
