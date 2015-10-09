@@ -134,7 +134,7 @@ class QueriesRepo
 	
 		$total_pages = ceil($count / $limit) ;	
 	
-		$queries = $GLOBALS['con']->from('queries')->limit($limit)->offset($offset);
+		$queries = $GLOBALS['con']->from('queries')->orderBy("date_created DESC")->limit($limit)->offset($offset);
 		
 		if(!empty($queries))
 		{
@@ -163,6 +163,14 @@ class QueriesRepo
 
 		$age = date_diff(date_create($data1['dob']), date_create('now'));
 		$age = $age->format("%Y Year, %M Months, %d Days");
+		$fileHtml = '';
+		if($data1['import'] == 1)
+        {
+        	$fileHtml = '<tr id="filename">
+        <th>File Name</th>
+        <td id="file_name"><a href = "email/'.$data1['filename'].'" target="_blank" >'.$data1['filename'].'</td>
+      	</tr>';
+      }
 
 		$queryDataStr = '<table class="table table-bordered">
                 <thead>
@@ -182,15 +190,8 @@ class QueriesRepo
                     <th>Age</th>
                     <td id="age">'.$age.'</td>
                   </tr>
-                  <?php
-	                  if('.$data1['import'].' == 1)
-	                  {
-	                  	<tr id="filename">
-	                    <th>File Name</th>
-	                    <td id="file_name"><a href = "email/'.$data1['filename'].'" target="_blank" >'.$data1['filename'].'</td>
-	                  	</tr>
-	                  }
-                  ?>
+
+	                  '.$fileHtml.'
                   <tr>
                     <th>Branch Office</th>
                     <td id="branch_office">'.$data1['branch_office'].'</td>
@@ -231,7 +232,15 @@ class QueriesRepo
                 </tbody>
               </table>';
 
-              echo $queryDataStr;		
+              if(empty($request['return']))
+              {
+	              echo $queryDataStr;              	
+              }
+              else
+              {
+              	return $queryDataStr;
+              }
+
 	}
 
 	public function queryDetail($request)
@@ -315,7 +324,7 @@ class QueriesRepo
 			$queryId = $GLOBALS['con']->insertInto('queries', $values)->execute();
 
 			// send email to admin
-			$this->sendMailAdmin();
+			$this->sendMailAdmin($queryId);
 
 			// send email to admin
 			$this->sendMailUser($request['email']);
@@ -328,16 +337,39 @@ class QueriesRepo
 		return 'success';
 	}
 
-	public function sendMailAdmin()
+	public function sendMailAdmin($queryId)
 	{
+		$request = array('id' => $queryId, 'return' => 1);
+		$queryData = $this->getQueryDetail($request);
+		$to = "jasonbourne501@gmail.com, manchag@hotmail.com";
+		$subject = "New Download";
 
+		$message = "
+		<html>
+		<head>
+		<title>New Download</title>
+		</head>
+		<body>".$queryData."</body>
+		</html>
+		";
+
+		// Always set content-type when sending HTML email
+		$headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+		// More headers
+		$headers .= 'From: <jasonbourne501@gmail.com>';
+
+		mail($to,$subject,$message,$headers);
 	}
 
 	public function sendMailUser($to)
 	{
 		$subject = "Saludos!";
 		$txt = file_get_contents(str_replace('Repo', '', __DIR__.'/admin/mail.html'));
-		$headers = "From: jasonbourne501@gmail.com";
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+		$headers .= "From: jasonbourne501@gmail.com";
 		mail($to,$subject,$txt,$headers);
 	}
 

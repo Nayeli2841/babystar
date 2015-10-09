@@ -421,34 +421,34 @@ function checkLoginState(){
 						From
 					</label>
 					<select class="selectpicker" id="start_time" data-width="25%">
-   						 <option value="7">07:00 hrs</option>
-   						 <option value="8">08:00 hrs</option>
-   						 <option value="9">09:00 hrs</option>
-   						 <option value="10">10:00 hrs</option>
-   						 <option value="11">11:00 hrs</option>
-   						 <option value="12">12:00 hrs</option>
-   						 <option value="13">13:00 hrs</option>
-   						 <option value="14">14:00 hrs</option>
-   						 <option value="15">15:00 hrs</option>
-   						 <option value="16">16:00 hrs</option>
-   						 <option value="17">17:00 hrs</option>
-   						 <option value="18">18:00 hrs</option>
+   						 <option value="07:00">07:00 hrs</option>
+   						 <option value="08:00">08:00 hrs</option>
+   						 <option value="09:00">09:00 hrs</option>
+   						 <option value="10:00">10:00 hrs</option>
+   						 <option value="11:00">11:00 hrs</option>
+   						 <option value="12:00">12:00 hrs</option>
+   						 <option value="13:00">13:00 hrs</option>
+   						 <option value="14:00">14:00 hrs</option>
+   						 <option value="15:00">15:00 hrs</option>
+   						 <option value="16:00">16:00 hrs</option>
+   						 <option value="17:00">17:00 hrs</option>
+   						 <option value="18:00">18:00 hrs</option>
   					</select>
             <b>To</b>
                
                <select class="selectpicker" id="end_time" data-width="25%">
-               <option value="8">08:00 hrs</option>
-               <option value="9">09:00 hrs</option>
-               <option value="10">10:00 hrs</option>
-               <option value="11">11:00 hrs</option>
-               <option value="12">12:00 hrs</option>
-               <option value="13">13:00 hrs</option>
-               <option value="14">14:00 hrs</option>
-               <option value="15">15:00 hrs</option>
-               <option value="16">16:00 hrs</option>
-               <option value="17">17:00 hrs</option>
-               <option value="18">18:00 hrs</option>
-               <option value="19">19:00 hrs</option>
+               <option value="08:00">08:00 hrs</option>
+               <option value="09:00">09:00 hrs</option>
+               <option value="10:00">10:00 hrs</option>
+               <option value="11:00">11:00 hrs</option>
+               <option value="12:00">12:00 hrs</option>
+               <option value="13:00">13:00 hrs</option>
+               <option value="14:00">14:00 hrs</option>
+               <option value="15:00">15:00 hrs</option>
+               <option value="16:00">16:00 hrs</option>
+               <option value="17:00">17:00 hrs</option>
+               <option value="18:00">18:00 hrs</option>
+               <option value="19:00">19:00 hrs</option>
             </select>
   					</div>
 <!-- 					<div class="col-sm-3">
@@ -516,7 +516,7 @@ function checkLoginState(){
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox4" type="checkbox" value="Kindergarten">
+              <input id="checkbox4" class="services" type="checkbox" value="Kindergarten">
               <label for="checkbox4">
                   Kindergarten
               </label>

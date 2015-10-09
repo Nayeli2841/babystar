@@ -147,7 +147,7 @@ $app->group('/api', function () use ($app) {
     $app->get('/queries', function() use ($app){
         $new = new QueriesRepo();
         $data = $new->getQueries($app->requestdata);
-        response(200, array('data' => $data['data']));    
+        response(200, array('data' => $data['data'],  'total_pages' => $data['total_pages']));    
     });   
 
     $app->post('/query', function() use ($app){

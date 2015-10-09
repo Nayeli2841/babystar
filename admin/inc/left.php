@@ -175,7 +175,7 @@
       <div class="modal-footer">
 
       <img src="images/spinner.gif" id="del_spinner" style="display:none;">
-      <button type="button" data-dismiss="modal" class="btn">No</button>
+      <button type="button" data-dismiss="modal" class="btn">Close</button>
  
       </div>
     </div>
