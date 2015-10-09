@@ -74,51 +74,6 @@ function response($code, $dataAry)
     });
 
 
-    $app->get('/news/', function () use ($app, $viewParameters) {
-        $newsRepo = new NewsRepo();
-        $news = $newsRepo->getNews(array());
-        $viewParameters['title'] = 'News';
-        $viewParameters['news']  = $news['data'];
-
-        $app->render('news.html.twig', $viewParameters);
-    })->name('index');
-
-    $app->get('/production/' , function () use ($app, $viewParameters){
-        $viewParameters['title'] = 'Production';
-        $app->render('production.html.twig', $viewParameters);
-    });
-
-    $app->get('/about/about-al-rajhi/' , function () use ($app, $viewParameters){
-        $viewParameters['title'] = 'Al-Rajhi';
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getTeams(array());
-        $viewParameters['teams'] = $teams['data'];
-        $app->render('about-al-rajhi.html.twig', $viewParameters);
-    });
-
-    $app->get('/about/our-team/' , function () use ($app, $viewParameters){
-        $viewParameters['title'] = 'Our Team';
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getTeams(array());
-        $viewParameters['teams'] = $teams['data'];
-        $app->render('about-team.html.twig', $viewParameters);
-    });
-
-    $app->get('/about/about-romeo-interiors/' , function () use ($app, $viewParameters){
-        $viewParameters['title'] = 'About Romeo';
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getTeams(array());
-        $viewParameters['teams'] = $teams['data'];
-        $app->render('about-romeo-interiors.html.twig', $viewParameters);
-    });
-
-    $app->get('/about/mission-values/' , function () use ($app, $viewParameters){
-        $viewParameters['title'] = 'Mission Values';
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getTeams(array());
-        $viewParameters['teams'] = $teams['data'];
-        $app->render('mission-values.html.twig', $viewParameters);
-    });
 
     $app->notFound(function () use ($app, $viewParameters) {
         $viewParameters['title'] = 'Not Found';        
@@ -191,10 +146,16 @@ $app->group('/api', function () use ($app) {
 
     $app->get('/queries', function() use ($app){
         $new = new QueriesRepo();
-        $code = $new->getQueries($app->requestdata);
-        response(200, array('data' => $code['data'], 'total_pages' => $code['total_pages']));
+        $code = $new->saveQuery($app->requestdata);
+        response(200, array('status' => 'success'));
         
     });   
+
+    $app->post('/query', function() use ($app){
+        $new = new QueriesRepo();
+        $status = $new->getQueries($app->requestdata);
+        response(200, array('status' => $status));
+    });
 
     // Delete Query
     $app->post('/deletequery', function() use ($app){

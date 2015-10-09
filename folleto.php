@@ -32,9 +32,29 @@
           $('#refer_to_other').fadeOut();          
         }
       }
+
+      function changebranch(curValue)
+      {
+        if(curValue == 'other')
+        {
+          $('#branch_office_other').fadeIn();
+        }
+        else
+        {
+          $('#branch_office_other').fadeOut();          
+        }
+      }
+
+
+
       $( document ).ready(function() {
         // Handler for .ready() called.
       });
+
+      function validateEmail(email) {
+          var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+          return re.test(email);
+      }
 
       function validation()
       {
@@ -44,11 +64,26 @@
       	var months 			= $.trim($('#months').val());
       	var days 			= $.trim($('#days').val());
       	var branch_office 	= $.trim($('#branch_office').val());
+        var branch_office_other  = $.trim($('#branch_office_other').val());
       	var start_time 		= $.trim($('#start_time').val());
       	var end_time 		= $.trim($('#end_time').val());
       	var email 			= $.trim($('#email').val());
       	var phone 			= $.trim($('#phone').val());
       	var refer_to 		= $.trim($('#refer_to').val());
+        var refer_to_other = $.trim($('#refer_to_other').val());
+        var other_service = $.trim($('#other_service').val());
+
+        // populate services
+        var services = [];
+        $("input:checkbox[class=services]:checked").each(function()
+        {
+            var service = $(this).val();
+            services.push(service);
+        });
+
+        if(other_service != '')
+          services.push(other_service);
+  
       	var check = true;
 
       	if(name == '')
@@ -60,65 +95,115 @@
 
       	if(child_name == '')
       	{
-      		$('#child_name').focus();
       		$('#child_name').addClass('has-error');
+          if(check)
+            $('#child_name').focus();
       		check = false;
       	}
-      	if(years == '')
+
+      	if(years == '' && months == '' && days == '')
       	{
-      		$('#years').focus();
-      		$('#years').addClass('has-error');
+      		$('#age_div').addClass('has-error');
+          if(check)
+            $('#years').focus();
       		check = false;
       	}
-      	if(months == '')
-      	{
-      		$('#months').focus();
-      		$('#months').addClass('has-error');
-      		check = false;
-      	}
-      	if(days == '')
-      	{
-      		$('#days').focus();
-      		$('#days').addClass('has-error');
-      		check = false;
-      	}
+
       	if(branch_office == '')
       	{
-      		$('#branch_office').focus();
       		$('#branch_office').addClass('has-error');
+          if(check)
+            $('#branch_office').focus();
       		check = false;
       	}
+        else if(branch_office == 'other' && branch_office_other == '')
+        {
+          $('#branch_office_other').focus();
+          $('#branch_office_other').addClass('has-error');
+          if(check)
+            $('#branch_office_other').focus();
+          check = false;
+        }
+
       	if(start_time == '')
       	{
-      		$('#start_time').focus();
       		$('#start_time').addClass('has-error');
+          if(check)
+            $('#start_time').focus();
       		check = false;
       	}
+
       	if(end_time == '')
       	{
-      		$('#end_time').focus();
       		$('#end_time').addClass('has-error');
+          if(check)
+            $('#end_time').focus();
       		check = false;
       	}
+
       	if(email == '')
       	{
-      		$('#email').focus();
       		$('#email').addClass('has-error');
+          if(check)
+            $('#email').focus();
       		check = false;
       	}
+        else
+        {
+          if(!validateEmail(email))
+          {
+            $('#email').addClass('has-error');
+            if(check)
+              $('#email').focus();
+            check = false;            
+          }
+        }
+
       	if(phone == '')
       	{
-      		$('#phone').focus();
       		$('#phone').addClass('has-error');
+          if(check)  
+            $('#phone').focus();
       		check = false;
       	}
+
       	if(refer_to == '')
       	{
-      		$('#refer_to').focus();
       		$('#refer_to').addClass('has-error');
+          if(check)  
+            $('#refer_to').focus();
       		check = false;
       	}
-      	
+      	else if(refer_to == 'other' && refer_to_other == '')
+        {
+          $('#refer_to_other').addClass('has-error');
+          if(check)  
+            $('#refer_to_other').focus();
+          check = false;
+        }
+
+
+
+
+        if(check)
+        {
+          $.ajax({
+              type: 'post',
+              url: 'api/query',
+              dataType : "JSON",
+              data: {parent_name:name, child_name:child_name, years:years, months:months, days:days, branch_office:branch_office, branch_office_other:branch_office_other, start_time:start_time, end_time:end_time, phone:phone, email:email, refer_by:refer_to, refery_by_other: refer_to_other, services:services},
+              beforeSend:function(){
+
+              },
+              success:function(data){
+                showMsg('#jobmsg', 'Query deleted successfully.', 'green');
+                getQueries();
+              },
+              error:function(jqxhr){
+              }
+            });
+        }
+
       }  
     </script>
 
@@ -226,7 +311,7 @@ function checkLoginState(){
 					</div>
 				</div>
 
-					<div class="form-group">
+					<div class="form-group" id="age_div">
 					 
 					<label for="age" class="col-sm-4 control-label">
 						Age
@@ -235,7 +320,7 @@ function checkLoginState(){
 <!-- 					<label for="age" class="col-sm-2 control-label">
 						Years
 					</label> -->
-					<select class="selectpicker" data-width="100%" id="years">
+					<select class="selectpicker" data-width="100%" id="years" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Years</option>
    						 <option value="0">0</option>
    						 <option value="1">1</option>
@@ -247,7 +332,7 @@ function checkLoginState(){
 <!--   					<label for="age" class="col-sm-2 control-label">
 						Months
 					</label> -->
-					<select class="selectpicker" id="months"  data-width="100%">
+					<select class="selectpicker" id="months"  data-width="100%" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Months</option>
    						 <option value="0">0</option>
    						 <option value="1">1</option>
@@ -267,7 +352,7 @@ function checkLoginState(){
 <!--   					<label for="age" class="col-sm-2 control-label">
 						Days
 					</label> -->
-  					<select class="selectpicker" id="days" data-width="100%">
+  					<select class="selectpicker" id="days" data-width="100%" onchange="$('#age_div').removeClass('has-error');">
                <option value="">Days</option>
    						 <option value="0">0</option>
    						 <option value="1">1</option>
@@ -310,14 +395,14 @@ function checkLoginState(){
 						Branch Office
 					</label>
 					<div class="col-sm-6">
-						<select class="selectpicker" id="branch_office" >
-   						 <option>Escandon</option>
-   						 <option>San Jeronimo</option>
-   						 <option>San Angel</option>
-   						 <option>Testify in area - specify</option>
+						<select class="selectpicker" id="branch_office" onchange="changebranch(this.value);">
+   						 <option value="Escandon">Escandon</option>
+   						 <option value="San Jeronimo">San Jeronimo</option>
+   						 <option value="San Angel">San Angel</option>
+   						 <option value="other">Testify in area - specify</option>
   					</select>
             <br><br>
-  					<input type="text" class="form-control" id="branch_office_other" placeholder="Other" onkeyup="$(this).removeClass('has-error');">
+  					<input type="text" class="form-control" id="branch_office_other" placeholder="Other" style="display:none;" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>				
 
@@ -408,43 +493,43 @@ function checkLoginState(){
 					</label>
 					<div class="col-sm-6">
           <div class="checkbox checkbox-primary">
-              <input id="checkbox1" type="checkbox">
+              <input id="checkbox1" class="services" type="checkbox" value="Web Cameras">
               <label for="checkbox1">
                   Web Cameras
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox2" type="checkbox">
+              <input id="checkbox2" class="services" type="checkbox" value="Early Stimulation">
               <label for="checkbox2">
                   Early Stimulation
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox3" type="checkbox">
+              <input id="checkbox3" class="services" type="checkbox" value="English">
               <label for="checkbox3">
                   English
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox4" type="checkbox">
+              <input id="checkbox4" type="checkbox" value="Kindergarten">
               <label for="checkbox4">
                   Kindergarten
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox5" type="checkbox">
+              <input id="checkbox5" class="services" type="checkbox" value="Nursery Express">
               <label for="checkbox5">
                   Nursery Express
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox6" type="checkbox">
+              <input id="checkbox6" class="services" type="checkbox">
               <label for="checkbox6">
                   Infants
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox7" type="checkbox">
+              <input id="checkbox7" class="services" type="checkbox">
               <label for="checkbox7">
                   Maternal
               </label>
@@ -453,7 +538,7 @@ function checkLoginState(){
 <!-- 					<label for="other_services" class="col-sm-2 control-label">
 						Other 
 					</label> -->
-						<input type="text" class="form-control" id="services_other" placeholder="other" onkeyup="$(this).removeClass('has-error');">
+						<input type="text" class="form-control" id="other_service" placeholder="other" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 

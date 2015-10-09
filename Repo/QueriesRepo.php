@@ -244,6 +244,39 @@ class QueriesRepo
 		return array('code' => 200, 'data' => $resp, 'services' => $data);
 	}
 
+	public function getDob($date, $years, $months, $days)
+	{
+		$dob = date('Y-m-d', mktime(0, 0, 0, $months, $days, $years));
+		return $dob;
+	}
+
+	public function saveQuery($request)
+	{
+		if($request['branch_office'] == 'other')
+			$request['branch_office'] = $request['branch_office_other'];
+
+		if($request['refer_by'] == 'other')
+			$request['refer_by'] = $request['refery_by_other'];
+		
+		$dateCreated = date('Y-m-d');
+		$dob = $this->getDob($dateCreated, $request['years'], $request['months'], $request['days']);
+
+		$values = array('filename' => '',
+						'parent_name' => $request['parent_name'],
+						'child_name' => $request['child_name'], 
+						'dob' => $dob,
+						'branch_office' => $request['branch_office'], 
+						'start_time' => $request['start_time'],
+						'end_time' => $request['end_time'],
+						'email' => $request['email'],
+						'phone' => $request['phone'],
+						'refer_by' => $request['refer_by'],
+						'import' => 0,
+						'date_created' => $dateCreated,
+						);
+		$query = $GLOBALS['con']->insertInto('queries', $values)->execute();
+
+	}
 	// public function getSubscribers($request)
 	// {
 	// 	$sortBy = 'id';
