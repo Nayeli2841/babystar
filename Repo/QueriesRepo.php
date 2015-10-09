@@ -150,6 +150,74 @@ class QueriesRepo
 		//return array('code' => '200','data' => $resp['data'], 'total_pages' => $resp['total_pages']);
 	}
 
+	public function getQueryDetail($request)
+	{
+		$data = $this->QueryDetail($request);
+
+		$queryDataStr = '<table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Parent Name</th>
+                    <td id="parent_name">Ingreed Castro</td>
+                  </tr>
+                  <tr>
+                    <th>Child Name</th>
+                    <td id="child_name">Madeline Sanchez</td>
+                  </tr>
+                  <tr>
+                    <th>Date Of Birth</th>
+                    <td id="dob"></td>
+                  </tr>
+                  <tr>
+                    <th>Age</th>
+                    <td id="age"></td>
+                  </tr>
+                  <tr id="filename">
+                    <th>File Name</th>
+                    <td id="file_name">12444.emlx</td>
+                  </tr>
+                  <tr>
+                    <th>Branch Office</th>
+                    <td id="branch_office">Condesa</td>
+                  </tr>
+                  <tr>
+                    <th>Strat Time</th>
+                    <td id="start_time">10:00:00</td>
+                  </tr>
+                  <tr>
+                    <th>End Time</th>
+                    <td id="end_time">16:00:00</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td id="email">pamcastro.77@gmail.com</td>
+                  </tr>
+                  <tr>
+                    <th>Phone</th>
+                    <td id="phone">5527443787</td>
+                  </tr>
+                  <tr>
+                    <th>Refer By</th>
+                    <td id="refer_by">Recomendación</td>
+                  </tr>
+                  <tr>
+                    <th>Date Created</th>
+                    <td id="date_created">2014-09-30 00:00:00</td>
+                  </tr>
+                  <tr>
+                    <th style="vertical-align: top;">Services</th>
+                    <td id="services">Guarderia<br>Lactantes<br>Web Cams<br>Estimulacion<br></td>
+                  </tr>
+
+                </thead>
+                <tbody id="detail">
+
+                </tbody>
+              </table>';
+
+              echo $queryDataStr;		
+	}
+
 	public function queryDetail($request)
 	{
 		$resp = array();

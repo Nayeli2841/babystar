@@ -120,6 +120,49 @@ function getReportingData()
 
 
 
+        $.each(['Escandon', 'San Jeronimo', 'San Angel'], function( index, value ) {
+          if(value == 'San Jeronimo')
+            var id = 'San-Jeronimo';
+          else if(value == 'San Angel')
+            var id = 'San-Angel';
+          else 
+            id = 'Escandon';
+
+          $('#' + id).highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        showInLegend: false,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                name: value,
+                colorByPoint: true,
+                data: data.data.services_comparison[value]
+              }]
+            });
+
+        });
 
 
 
@@ -710,17 +753,18 @@ function showQueryPopup(id)
   queryDetail(id);
 }
 
+var globalNum = 1;
 function getQueries(page)
 {
     curpage = page;
-    if(page > 0)
-    page -= 1;
+    // if(page > 0)
+    // page -= 1;
 
     $.ajax({
       type: 'GET',
       url: apiUrl + 'queries',
       dataType : "JSON",
-      data: {},
+      data: {page:page},
       //async:sync,
       beforeSend:function(){
 
@@ -755,14 +799,22 @@ function getQueries(page)
         $('#queriesbody').html(html);
        // $('#cat_id').append(options);
 
-       $('#pagination').bootpag({
-            total: data.total_pages,          // total pages
-            page: page,            // default page
-            maxVisible: 5,     // visible pagination
-            leaps: true         // next/prev leaps through maxVisible
-        }).on("page", function(event, num){
-          getQueries(num);
-           });
+
+         $('#pagination').bootpag({
+              total: data.total_pages,          // total pages
+              page: page,            // default page
+              maxVisible: 5,     // visible pagination
+              leaps: true         // next/prev leaps through maxVisible
+          }).on("page", function(event, num){
+             if(num != globalNum)
+             {
+              getQueries(num);
+              globalNum = num;                      
+             }
+             });
+
+
+
 
       },
       error:function(jqxhr){
@@ -780,35 +832,37 @@ function queryDetail(id)
 
       },
         success:function(data){
-          
-          $('#parent_name').html(data.data.data.parent_name);
-          $('#child_name').html(data.data.data.child_name);
-          $('#dob').html(data.data.data.dob);
-          if(data.data.data.import == '1')
-          {
-            var file = '<a href="email/'+data.data.data.filename+'" target="_blank" >'+data.data.data.filename+' </a>';
-            //var filename = "<a href="admin/email/"+"data.data.data.filename+" target="_blank">data.data.data.filename</a>";
-            $('#file_name').html(file);
-          }
-          else
-          {
-            $('#filename').hide();
-          }
-          //$('#file_name').html(data.data.data.filename);
-          $('#branch_office').html(data.data.data.branch_office);
-          $('#start_time').html(data.data.data.start_time);
-          $('#end_time').html(data.data.data.end_time);
-          $('#email').html(data.data.data.email);
-          $('#phone').html(data.data.data.phone);
-          $('#refer_by').html(data.data.data.refer_by);
-          $('#date_created').html(data.data.data.date_created);
-          var html = '';
-          $.each(data.data.services, function( index, value ) {
-              html += value.service+'<br>';
+            
+          $('#detail_query_body').html(data);
+          // $('#parent_name').html(data.data.data.parent_name);
+          // $('#child_name').html(data.data.data.child_name);
+          // var dob = data.data.data.dob;
+          // //dob= dob.format("dd-mm-yy");
+          // //$('#dob').html(dob);
+          // if(data.data.data.import == '1')
+          // {
+          //   $('#file_name').html(data.data.data.filename);
+          // }
+          // else
+          // {
+          //   $('#filename').hide();
+          // }
+          // //$('#file_name').html(data.data.data.filename);
+          // $('#branch_office').html(data.data.data.branch_office);
+          // $('#start_time').html(data.data.data.start_time);
+          // $('#end_time').html(data.data.data.end_time);
+          // $('#email').html(data.data.data.email);
+          // $('#phone').html(data.data.data.phone);
+          // $('#refer_by').html(data.data.data.refer_by);
+          // $('#date_created').html(data.data.data.date_created);
+          // var html = '';
+          // $.each(data.data.services, function( index, value ) {
+          //     html += value.service+'<br>';
 
-            });   
+          //   });   
 
-          $('#services').html(html);
+          // $('#services').html(html);
+
 
       },
       error:function(jqxhr){

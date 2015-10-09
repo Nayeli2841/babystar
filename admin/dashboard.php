@@ -55,49 +55,48 @@ $(function () {
 
 
           <div class="row" style="margin-top:10px;">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
               <div class="panel panel-info">
                 <div class="panel-heading">
-                  <h3 class="panel-title">Downloads in this month</h3>
+                  <h3 class="panel-title">Escandon</h3>
                 </div>
                 <div class="panel-body">
-                  <table class="table">
-                    <thead>
-                    <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
-                    <tr><td id="last_month_str"></td><td id="last_month_download"></td></tr>
-                    <tr><td id="cur_percentage_str"></td><td id="cur_percentage"></td></tr>                    
-                  </table>
+                  <div id="Escandon"></div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
+            </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="col-lg-12">
               <div class="panel panel-info">
                 <div class="panel-heading">
-                  <h3 class="panel-title">Downloads in this year</h3>
+                  <h3 class="panel-title">San Jeronimo</h3>
                 </div>
                 <div class="panel-body">
-                  <table class="table">
-                    <thead>                  
-                    <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
-                    <tr><td id="last_year_str"></td><td id="last_year_download"></td></tr>
-                    <tr><td id="cur_year_percentage_str"></td><td id="cur_year_percentage"></td></tr>                    
-                  </table>
+                  <div id="San-Jeronimo"></div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
+            </div>
 
+          <div class="row" style="margin-top:10px;">
+            <div class="col-lg-12">
               <div class="panel panel-info">
                 <div class="panel-heading">
-                  <h3 class="panel-title">Other branches</h3>
+                  <h3 class="panel-title">San Angel</h3>
                 </div>
-                <div class="panel-body" id="readmore">
+                <div class="panel-body">
+                  <div id="San-Angel"></div>
                 </div>
               </div>
-
-
             </div>
-          </div>
+            </div>
+
+
+
+            
+
 
           <div class="row" style="margin-top:10px;">
             <div class="col-lg-4">
@@ -143,13 +142,6 @@ $(function () {
 
             </div>
           </div>
-
-
-
-
-
-
-
 
 
 
