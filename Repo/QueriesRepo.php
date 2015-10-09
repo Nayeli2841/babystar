@@ -160,7 +160,7 @@ class QueriesRepo
                 <thead>
                   <tr>
                     <th>Parent Name</th>
-                    <td id="parent_name"><?php echo 'abc'; ?></td>
+                    <td id="parent_name"><?php echo '.$data1['parent_name'].'; ?></td>
                   </tr>
                   <tr>
                     <th>Child Name</th>

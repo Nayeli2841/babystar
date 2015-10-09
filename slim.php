@@ -146,14 +146,13 @@ $app->group('/api', function () use ($app) {
 
     $app->get('/queries', function() use ($app){
         $new = new QueriesRepo();
-        $code = $new->saveQuery($app->requestdata);
-        response(200, array('status' => 'success'));
-        
+        $data = $new->getQueries($app->requestdata);
+        response(200, array('data' => $data['data']));    
     });   
 
     $app->post('/query', function() use ($app){
         $new = new QueriesRepo();
-        $status = $new->getQueries($app->requestdata);
+        $code = $new->saveQuery($app->requestdata);
         response(200, array('status' => $status));
     });
 
