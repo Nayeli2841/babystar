@@ -1,6 +1,6 @@
     $(function() {
-		$( "#sortable-todo" ).sortable();
-		$( "#sortable-todo" ).disableSelection();
+		// $( "#sortable-todo" ).sortable();
+		// $( "#sortable-todo" ).disableSelection();
 	});
 	
 	$('#sortable-todo li input').on('click', function(e) {

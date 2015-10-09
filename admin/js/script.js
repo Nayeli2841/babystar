@@ -120,6 +120,49 @@ function getReportingData()
 
 
 
+        $.each(['Escandon', 'San Jeronimo', 'San Angel'], function( index, value ) {
+          if(value == 'San Jeronimo')
+            var id = 'San-Jeronimo';
+          else if(value == 'San Angel')
+            var id = 'San-Angel';
+          else 
+            id = 'Escandon';
+
+          $('#' + id).highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        showInLegend: false,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                name: value,
+                colorByPoint: true,
+                data: data.data.services_comparison[value]
+              }]
+            });
+
+        });
 
 
 
@@ -710,17 +753,18 @@ function showQueryPopup(id)
   queryDetail(id);
 }
 
+var globalNum = 1;
 function getQueries(page)
 {
     curpage = page;
-    if(page > 0)
-    page -= 1;
+    // if(page > 0)
+    // page -= 1;
 
     $.ajax({
       type: 'GET',
       url: apiUrl + 'queries',
       dataType : "JSON",
-      data: {},
+      data: {page:page},
       //async:sync,
       beforeSend:function(){
 
@@ -755,14 +799,22 @@ function getQueries(page)
         $('#queriesbody').html(html);
        // $('#cat_id').append(options);
 
-       $('#pagination').bootpag({
-            total: data.total_pages,          // total pages
-            page: page,            // default page
-            maxVisible: 5,     // visible pagination
-            leaps: true         // next/prev leaps through maxVisible
-        }).on("page", function(event, num){
-          getQueries(num);
-           });
+
+         $('#pagination').bootpag({
+              total: data.total_pages,          // total pages
+              page: page,            // default page
+              maxVisible: 5,     // visible pagination
+              leaps: true         // next/prev leaps through maxVisible
+          }).on("page", function(event, num){
+             if(num != globalNum)
+             {
+              getQueries(num);
+              globalNum = num;                      
+             }
+             });
+
+
+
 
       },
       error:function(jqxhr){

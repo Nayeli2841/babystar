@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Babystar</title>
+    <title>Guarderías BabyStar - Guarderia muy cerca de ti</title>
 
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
@@ -57,6 +57,7 @@
       		$('#parent_name').addClass('has-error');
       		check = false;
       	}
+
       	if(child_name == '')
       	{
       		$('#child_name').focus();
@@ -211,7 +212,7 @@ function checkLoginState(){
 						Name
 					</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="parent_name" required>
+						<input type="text" class="form-control" id="parent_name" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
@@ -221,7 +222,7 @@ function checkLoginState(){
 						Name your child
 					</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="child_name" required>
+						<input type="text" class="form-control" id="child_name" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
@@ -316,7 +317,7 @@ function checkLoginState(){
    						 <option>Testify in area - specify</option>
   					</select>
             <br><br>
-  					<input type="text" class="form-control" id="branch_office_other" placeholder="Other">
+  					<input type="text" class="form-control" id="branch_office_other" placeholder="Other" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>				
 
@@ -387,7 +388,7 @@ function checkLoginState(){
 						Email
 					</label>
 					<div class="col-sm-6">
-						<input type="email" class="form-control" id="email" required>
+						<input type="email" class="form-control" id="email" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 				<div class="form-group">
@@ -396,7 +397,7 @@ function checkLoginState(){
 						Phone
 					</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="phone" required>
+						<input type="text" class="form-control" id="phone" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
@@ -452,7 +453,7 @@ function checkLoginState(){
 <!-- 					<label for="other_services" class="col-sm-2 control-label">
 						Other 
 					</label> -->
-						<input type="text" class="form-control" id="services_other" placeholder="other">
+						<input type="text" class="form-control" id="services_other" placeholder="other" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
@@ -472,14 +473,14 @@ function checkLoginState(){
    						 <option value="other">Other - specify</option>
   					</select>
             <br><br>
-  					<input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="other">
+  					<input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="other" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<div class="col-sm-offset-4 col-sm-10">
 						 
-						<button type="submit" class="btn btn-primary" onClick="validation();">
+						<button type="button" class="btn btn-primary" onClick="validation();">
 							Download Brochure
 						</button>
 					</div>

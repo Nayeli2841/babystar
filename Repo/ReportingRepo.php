@@ -57,7 +57,8 @@ class ReportingRepo{
 		$firstDayOfYear =  date('Y').'-01-01';
 		$otherBranches = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'branch_office');
 		$otherReferBy = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'refer_by');
-		$otherServices = $this->getOtherByType('2014-01-01', date('Y-m-d'), 'service');//$toLowerDate
+		$otherServices = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'service');//$toLowerDate
+		$monthlyBrnachServicesComparison = $this->getComparisonByBranchServices($firstDayOfYear, date('Y-m-d'), '', '');
 
 
 		// current month
@@ -94,9 +95,108 @@ class ReportingRepo{
 					 'other_branches' => $otherBranches,
 					 'other_refer_by' => $otherReferBy,
 					 'other_services' => $otherServices,
+					 'services_comparison' => $monthlyBrnachServicesComparison,
 					 );
 		// print_r($yearsArr);
 	}
+
+	public function getComparisonByBranchServices($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate)
+	{
+		$previousMonthBranches = array();
+		$currentMonthBranches = array();		
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$sth = $GLOBALS['pdo']->query($sql);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		while ($row = $sth->fetch()) {
+			$sql2 = "SELECT count(s.service) as service_count, s.service from queries as q, services as s where q.id = s. query_id AND q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by s.service";
+			$sth2 = $GLOBALS['pdo']->query($sql2);
+			$sth2->setFetchMode(PDO::FETCH_ASSOC);
+			while ($row2 = $sth2->fetch()) 
+			{
+				if(!isset($previousMonthBranches[$row['branch_office']]))
+					$previousMonthBranches[$row['branch_office']] = array();
+				$previousMonthBranches[$row['branch_office']][$row2['service']] = $row2['service_count'];
+			}
+		}
+
+
+		// $sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by q.branch_office";
+		// $sth = $GLOBALS['pdo']->query($sql);
+		// $sth->setFetchMode(PDO::FETCH_ASSOC);
+		// while ($row = $sth->fetch()) {
+		// 	$sql2 = "SELECT count(s.service) as service_count, s.service from queries as q, services as s where q.id = s. query_id AND q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by s.service";
+		// 	$sth2 = $GLOBALS['pdo']->query($sql2);
+		// 	$sth2->setFetchMode(PDO::FETCH_ASSOC);
+		// 	while ($row2 = $sth2->fetch()) 
+		// 	{
+		// 		if(!isset($currentMonthBranches[$row['branch_office']]))
+		// 			$currentMonthBranches[$row['branch_office']] = array();
+		// 		$currentMonthBranches[$row['branch_office']][$row2['service']] = $row2['service_count'];
+		// 	}
+		// }
+
+
+		// if(!empty($currentMonthBranches))
+		// {
+		// 	foreach ($currentMonthBranches as $singleBranch => $currentMonthBranch) {
+		// 		if(!array_key_exists($singleBranch, $previousMonthBranches))
+		// 		{
+		// 			$previousMonthBranches[$singleBranch] = array();
+		// 		}
+
+		// 		if(!empty($currentMonthBranch))
+		// 		{
+		// 			foreach ($currentMonthBranch as $singleService => $value) {
+		// 				if(!isset($previousMonthBranch[$singleBranch][$singleService]))
+		// 					$previousMonthBranch[$singleBranch][$singleService] = 0;
+		// 			}
+		// 		}				
+		// 	}
+		// }
+
+		// if(!empty($previousMonthBranches))
+		// {
+		// 	foreach ($previousMonthBranches as $singleBranch => $previousMonthBranch) {
+		// 		if(!isset($previousMonthBranche[$singleBranch]))
+		// 		{
+		// 			$currentMonthBranches[$singleBranch] = array();
+		// 		}
+		// 		if(!empty($previousMonthBranch))
+		// 		{
+		// 			foreach ($previousMonthBranch as $singleService => $value) {
+		// 				if(!isset($currentMonthBranches[$singleBranch][$singleService]))
+		// 					$currentMonthBranches[$singleBranch][$singleService] = 0;
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// echo "<pre>";
+		// print_r($previousMonthBranches);
+
+		$finalData = array();
+		if(!empty($previousMonthBranches))
+		{
+			$key = 1;
+			foreach ($previousMonthBranches as $branch => $services) {
+				$finalData[$branch]  = array();
+				if(!empty($services))
+				{
+					foreach ($services as $service => $counts) 
+					{
+						$finalData[$branch][] = array('name' => utf8_encode($service), 'y' => (int) $counts);
+					}
+				}
+				
+				++$key;
+
+			}
+		}
+
+		return $finalData;
+
+	}
+
 
 	public function getOtherByType($fromDate, $toDate, $type)
 	{
