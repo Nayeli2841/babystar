@@ -93,10 +93,32 @@ $(function () {
             </div>
             </div>
 
+           <div class="row" style="margin-top:10px;">
+            <div class="col-lg-12">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Monthly Branch Channels comparison</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="monthly_refer_by"></div>
+                </div>
+              </div>
+            </div>
+            </div>
 
 
-            
-
+           <div class="row" style="margin-top:10px;">
+            <div class="col-lg-12">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Yearly Branch Channels comparison</h3>
+                </div>
+                <div class="panel-body">
+                  <div id="yearly_refer_by"></div>
+                </div>
+              </div>
+            </div>
+            </div>
 
           <div class="row" style="margin-top:10px;">
             <div class="col-lg-4">
@@ -143,7 +165,21 @@ $(function () {
             </div>
           </div>
 
+      <div class="row" style="margin-top:10px;">
+            
+            <div class="col-lg-4">
 
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Other Services</h3>
+                </div>
+                <div class="panel-body" id="readmoreservices">
+                </div>
+              </div>
+
+
+            </div>
+          </div>
 
 
 

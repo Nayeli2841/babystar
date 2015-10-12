@@ -118,6 +118,98 @@ function getReportingData()
           moreLink: '<a href="#" style="margin-left:245px;">More branches</a>'
         });
 
+        //other services
+        var otherServices = '';
+        $.each(data.data.other_services, function( index, value ) {
+          otherServices += value + '<br>';
+        });
+
+        $('#readmoreservices').html(otherServices);
+
+        $('#readmoreservices').readmore({
+          speed: 75,
+          lessLink: '<a href="#" style="margin-left:245px;">Read less</a>',
+          moreLink: '<a href="#" style="margin-left:245px;">More Services</a>'
+        });        
+
+
+
+      $('#monthly_refer_by').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories:data.data.monthly_brnach_referrals.branches,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Percentage (%)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: data.data.monthly_brnach_referrals.data
+    });
+
+
+      $('#yearly_refer_by').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories:data.data.yearly_brnach_referrals.branches,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Percentage (%)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: data.data.yearly_brnach_referrals.data
+    });
+
+
 
 
         $.each(['Escandon', 'San Jeronimo', 'San Angel'], function( index, value ) {
@@ -753,6 +845,293 @@ function showQueryPopup(id)
   queryDetail(id);
 }
 
+function sendEmail()
+{
+  var email = $.trim($('#user_email').val());
+  var emailSubject = $.trim($('#email_subject').val());
+  var emailBody = $.trim($('#email_body').val());
+
+  if(emailBody != '')
+  {
+    $.ajax({
+          type: 'POST',
+          url: apiUrl + 'mail',
+          dataType : "JSON",
+          data: { email: email, subject: emailSubject, message:emailBody },
+          beforeSend:function(){
+
+          },
+          success:function(data){
+            $('#email_body, #email_subject, #user_email').val('');
+          },
+          error:function(jqxhr){
+
+          }
+        });    
+  }
+  else
+  {
+    $('#email_body').addClass('error-class');
+  }
+
+}
+
+function resetMessage(email)
+{
+  $('#user_email').val(email);
+  $('#email_subject, #email_body').val('');
+}
+
+
+      function validateEmail(email) 
+      {
+          var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+          return re.test(email);
+      }
+
+      function validation()
+      {
+        var name      = $.trim($('#parent_name').val());
+        var query_id      = $.trim($('#query_id').val());
+        var child_name    = $.trim($('#child_name').val());
+        var dob       = $.trim($('#dob').val());
+        var branch_office   = $.trim($('#branch_office').val());
+        var branch_office_other  = $.trim($('#branch_office_other').val());
+        var start_time    = $.trim($('#start_time').val());
+        var end_time    = $.trim($('#end_time').val());
+        var email       = $.trim($('#email').val());
+        var phone       = $.trim($('#phone').val());
+        var refer_to    = $.trim($('#refer_to').val());
+        var refer_to_other = $.trim($('#refer_to_other').val());
+        var other_service = $.trim($('#other_service').val());
+
+        // populate services
+        var services = [];
+        $("input:checkbox[class=services]:checked").each(function()
+        {
+            var service = $(this).val();
+            services.push(service);
+        });
+
+        if(other_service != '')
+          services.push(other_service);
+  
+        var check = true;
+
+        if(name == '')
+        {
+          $('#parent_name').focus();
+          $('#parent_name').addClass('has-error');
+          check = false;
+        }
+
+        if(child_name == '')
+        {
+          $('#child_name').addClass('has-error');
+          if(check)
+            $('#child_name').focus();
+          check = false;
+        }
+
+        if(dob == '')
+        {
+          $('#dob').addClass('has-error');
+          if(check)
+            $('#dob').focus();
+          check = false;
+        }
+
+        if(branch_office == '')
+        {
+          $('#branch_office').addClass('has-error');
+          if(check)
+            $('#branch_office').focus();
+          check = false;
+        }
+        else if(branch_office == 'other' && branch_office_other == '')
+        {
+          $('#branch_office_other').focus();
+          $('#branch_office_other').addClass('has-error');
+          if(check)
+            $('#branch_office_other').focus();
+          check = false;
+        }
+
+        if(start_time == '')
+        {
+          $('#start_time').addClass('has-error');
+          if(check)
+            $('#start_time').focus();
+          check = false;
+        }
+
+        if(end_time == '')
+        {
+          $('#end_time').addClass('has-error');
+          if(check)
+            $('#end_time').focus();
+          check = false;
+        }
+
+        if(email == '')
+        {
+          $('#email').addClass('has-error');
+          if(check)
+            $('#email').focus();
+          check = false;
+        }
+        else
+        {
+          if(!validateEmail(email))
+          {
+            $('#email').addClass('has-error');
+            if(check)
+              $('#email').focus();
+            check = false;            
+          }
+        }
+
+        if(phone == '')
+        {
+          $('#phone').addClass('has-error');
+          if(check)  
+            $('#phone').focus();
+          check = false;
+        }
+
+        if(refer_to == '')
+        {
+          $('#refer_to').addClass('has-error');
+          if(check)  
+            $('#refer_to').focus();
+          check = false;
+        }
+        else if(refer_to == 'other' && refer_to_other == '')
+        {
+          $('#refer_to_other').addClass('has-error');
+          if(check)  
+            $('#refer_to_other').focus();
+          check = false;
+        }
+
+
+
+
+        if(check)
+        {
+          $('#query_spinner').show();
+          $.ajax({
+              type: 'post',
+              url: '../api/query',
+              dataType : "JSON",
+              data: {id:query_id, parent_name:name, child_name:child_name, dob:dob, branch_office:branch_office, branch_office_other:branch_office_other, start_time:start_time, end_time:end_time, phone:phone, email:email, refer_by:refer_to, refery_by_other: refer_to_other, services:services},
+              beforeSend:function(){
+
+              },
+              success:function(data){
+                if(data.status == 'success')
+                {
+                  getQueries();
+                }
+              },
+              error:function(jqxhr){
+                $('#query_spinner').hide();                
+              }
+            });
+        }
+
+      }  
+
+function getQueryData(id)
+{
+  // reset fields
+  $('#parent_name, #child_name, #dob, #branch_office_other, #email, #phone, #other_service, #refer_to_other').val('');
+  $('#query_id').val(id);
+  $('#branch_office option:first-child, #start_time option:first-child, #start_time option:first-child, #refer_to option:first-child').attr("selected", "selected");
+  $('#refer_to_other, #branch_office_other').hide();
+  $('.services').prop('checked', false);
+
+
+  $.ajax({
+      type: 'GET',
+      url: apiUrl + 'get_query_data',
+      dataType:"JSON",
+      data: {id:id},
+      beforeSend:function(){
+
+      },
+        success:function(data){
+
+          $('#parent_name').val(data.data.parent_name);
+          $('#child_name').val(data.data.child_name);
+          $('#dob').val(data.data.dob);
+          if(data.data.branch_office == 'Escandon' || data.data.branch_office == 'San Angel' || data.data.branch_office == 'San Jeronimo')
+            $('#branch_office').val(data.data.branch_office);
+          else
+          {
+            $('#branch_office').val('other');
+            $('#branch_office_other').val(data.data.branch_office);
+            $('#branch_office_other').show();
+          }
+
+
+          $('#start_time').val(data.data.start_time);
+          $('#end_time').val(data.data.end_time);
+          $('#email').val(data.data.email);
+          $('#phone').val(data.data.phone);
+          $('#refer_to').val(data.data.refer_by);
+          console.log(data.services);
+          $.each(data.services, function( index, value ) {
+            if($("input:checkbox[value='" + value.service + "']").length > 0)
+              $("input:checkbox[value='" + value.service + "']").attr("checked", true);
+            else
+              $('#other_service').val(value.service);
+          });
+
+          if(data.data.refer_by == 'recommendation' || data.data.refer_by == 'google' ||
+           data.data.refer_by == 'bing' || data.data.refer_by == 'youtube' || 
+           data.data.refer_by == 'facebook' || data.data.refer_by == 'external advertising')
+          {
+            $('#refer_to').val(data.data.refer_by);
+          }
+          else
+          {
+            $('#refer_to').val('other');
+            $('#refer_to_other').val(data.data.refer_by);
+            $('#refer_to_other').show();
+          }
+
+
+      },
+      error:function(jqxhr){
+      }
+    });
+}
+
+function changeReferBy(curValue)
+      {
+        if(curValue == 'other')
+        {
+          $('#refer_to_other').fadeIn();
+        }
+        else
+        {
+          $('#refer_to_other').fadeOut();          
+        }
+      }
+
+      function changebranch(curValue)
+      {
+        if(curValue == 'other')
+        {
+          $('#branch_office_other').fadeIn();
+        }
+        else
+        {
+          $('#branch_office_other').fadeOut();          
+        }
+      }
+
 var globalNum = 1;
 function getQueries(page)
 {
@@ -780,9 +1159,9 @@ function getQueries(page)
                 html += '<tr>\
                             <td>'+value.parent_name+'</td>\
                             <td>'+value.child_name+'</td>\
-                            <td>'+value.dob+'</td>\
-                            <td>'+value.date_created+'</td>\
-                            <td> <a href="javascript:void(0);" data-toggle="modal" data-target="#query_detail" onclick="showQueryPopup('+value.id+')"> View </a> | <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')">Delete</a></td>\
+                            <td>'+value.dob_formatted+'</td>\
+                            <td>'+value.date_created_formatted+'</td>\
+                            <td><a href="javascript:void(0);" data-toggle="modal" onclick="getQueryData('+value.id+');" data-target="#edit_query"> <i class="fa fa-pencil"></i> </a> | <a href="javascript:void(0);" data-toggle="modal" onclick="resetMessage(\''+value.email+'\');" data-target="#message_user"> <i class="fa fa-envelope"></i> </a> | <a href="javascript:void(0);" data-toggle="modal" data-target="#query_detail" onclick="showQueryPopup('+value.id+')"> <i class="fa fa-tasks"></i> </a> </a> | <a href="javascript:void(0);" data-toggle="modal" data-target="#confirm" onclick="showDelPopup('+value.id+')"><i class="fa fa-trash-o"></i></a></td>\
                          </tr>';
 
             });            

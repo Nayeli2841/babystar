@@ -139,8 +139,12 @@ class QueriesRepo
 		if(!empty($queries))
 		{
 			foreach ($queries as $key => $query) {
-				$query = array_map('utf8_encode', $query);
-				$resp['data'][] = $query;
+				$query = $this->queryDetail(array('id' => $query['id']));				
+				if(!empty($query))
+				{
+					$resp['data'][] = $query['data'];
+				}
+				// $query = array_map('utf8_encode', $query);
 			}
 		}
 
@@ -261,6 +265,18 @@ class QueriesRepo
 		{
 			foreach ($query as $key => $queries) 
 			{
+				if(!empty($queries['dob']))
+					$queries['dob_formatted'] = date('d F Y', strtotime($queries['dob']));
+
+				if(!empty($queries['start_time']))
+					$queries['start_time'] = date('H:i', strtotime($queries['start_time']));
+
+				if(!empty($queries['end_time']))
+					$queries['end_time'] = date('H:i', strtotime($queries['end_time']));
+
+				if(!empty($queries['date_created']))
+					$queries['date_created_formatted'] = date('d F Y H:i', strtotime($queries['date_created']));
+
 				$queries = array_map('utf8_encode', $queries);
 				$resp = $queries;
 			}
@@ -297,7 +313,7 @@ class QueriesRepo
 		if($request['refer_by'] == 'other')
 			$request['refer_by'] = $request['refery_by_other'];
 		
-		$dateCreated = date('Y-m-d');
+		$dateCreated = date('Y-m-d H:i:s');
 		$dob = date('Y-m-d', strtotime($request['dob']));
 
 		$values = array('filename' => '',
@@ -316,6 +332,7 @@ class QueriesRepo
 
 		if(!empty($request['id']))
 		{
+			unset($values['date_created']);
 			$queryId = $request['id'];
 			$query = $GLOBALS['con']->update('queries', $values, $request['id'])->execute();
 		}
@@ -332,6 +349,8 @@ class QueriesRepo
 		}
 
 		// add services
+		if(!empty($request['services']))
+			$request['services'] = array();
 		$this->addServices($queryId, $request['services']);
 
 		return 'success';
@@ -372,142 +391,4 @@ class QueriesRepo
 		$headers .= "From: jasonbourne501@gmail.com";
 		mail($to,$subject,$txt,$headers);
 	}
-
-	// public function getSubscribers($request)
-	// {
-	// 	$sortBy = 'id';
-	// 	$orderBy = 'asc';
-
-	// 	if(!isset($request['status']))
-	// 		$status = 'active';
-	// 	else
-	// 		$status = $request['status'];
-
-	// 	if(isset($request['sort_by']) && !empty($request['sort_by']) && isset($request['sort_order']) && !empty($request['sort_order'] )) 
-	// 	{
-	// 		$sortBy = $request['sort_by'];
-	// 		$orderBy = $request['sort_order'];
-	// 	}
-
-	// 	if(isset($request['search']) && !empty($request['search']))
-	// 		$key = '%'.$request['search'].'%';
-
-	// 	$limit = 15;
-	// 	$total_pages = 0;
-	// 	if(!isset($request['page']))
-	// 		$page = 0;
-	// 	else
-	// 		$page = $request['page'];
-
-	// 	$offset = $page * $limit;
-
-	// 	$resp = array('code' => 200, 'data' => array());
-
-	// 	if(!isset($key))
-	// 	{
-	// 		$count = $GLOBALS['con']->from('subscribers')->where('status', $status)->count();
-
-	// 	}
-	// 	else
-	// 	{
-	// 		$rawSql = "SELECT COUNT(*) as cid FROM subscribers where status = '".$status."' AND  (email like '".$key."')";
-	// 		$stmt = $GLOBALS['pdo']->query($rawSql);
-	// 		$count = $stmt->fetchColumn();
-	// 	}
-
-
-	// 	$total_pages = ceil($count / $limit) ;			
-	// 	if(isset($key))
-	// 	{
-	// 		$rawSql = "SELECT * FROM subscribers where  status = '".$status."' AND  (email like '".$key."')";
-	// 		$stmt = $GLOBALS['pdo']->query($rawSql);
-	// 		$queries = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	// 	}
-	// 	else
-	// 	{
-	// 		$queries = $GLOBALS['con']->from('subscribers')->orderBy($sortBy." ".$orderBy)->where('status', $status)->limit($limit)->offset($offset);
-	// 	}
-
-
-	// 	$allVendors = array();
-	// 	if(!empty($queries))
-	// 	{
-	// 		foreach ($queries as $key => $query) {
-	// 			$resp['data'][] = $query;
-	// 		}
-	// 	}
-
-	// 	$resp['total_pages'] = $total_pages;
-	// 	return $resp;
-	// }	
-
-	// public function editSubscriber($request)
-	// {
-	// 	$response = 400;
-
-	// 	if(!empty($request['email']))
-	// 	{
-	// 		$count = $GLOBALS['con']->from('subscribers')->where('email',$request['email'])->where('id != ?',$request['id'])->count();
-	// 		if($count > 0)
-	// 		{
-	// 			$response = 400;
-	// 		}
-	// 		else
-	// 		{
-	// 			$date_created = date("Y-m-d H:i:s");
-	// 			$values = array('email' => $request['email'],'date_created' => $date_created, "first_name" => $request['first_name'], "last_name" =>  $request['last_name'] );
-	// 			$query = $GLOBALS['con']->update('subscribers', $values, $request['id'])->execute();
-	// 			$response = 200;
-	// 		}
-	// 	}
-	// 	return $response;
-	// }
-
-	// public function getSingleSubscriber($request)
-	// {
-	// 	$query = $GLOBALS['con']->from('subscribers')->where('id',$reuqeust['id']);
-	// 	$subscriber = array();
-
-	// 		foreach($query as $items)
-	//     	{
-	// 			$subscriber[] = $items;
-
-	// 		}
-
-	// 		return array('code' => '200','data' => $subscriber);
-	// }
-
-	// public function deactiveSubscriber($request)
-	// {
-	// 	$response = 400;
-	// 	$values = array('status' => $request['status']);
-	// 	$query = $GLOBALS['con']->update('subscribers', $values, $request['id'])->execute();
-	// 	$response = 200;
-	// 	return $response;
-	// }
-
-	// public function subscriberExists($data)
-	// {
-	// 	$count = $GLOBALS['con']->from('subscribers')->where('email',$data['email'])->count();
-	// 	if($count == 0)
-	// 		return 200;
-	// 	else
-	// 		return 401;
-	// }
-
-	// public function verifyEmail($request)
-	// {
-	// 	$count = $GLOBALS['con']->from('subscribers')->where('email',$request['email'])->count();
-	// 	if($count > 0)
-	// 	{
-	// 		$values = array('verified' => '1');
-	// 		$sql = $GLOBALS['con']->update('subscribers')->set($values)->where('email', $request['email'])->execute();			
-	// 		$response = 200;
-	// 	}
-	// 	else
-	// 	{
-	// 		$response = 400;
-	// 	}
-	// 	return $response;
-	// }
 }

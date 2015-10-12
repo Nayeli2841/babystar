@@ -53,6 +53,7 @@ class ReportingRepo{
 		$curMonthcomparison = $this->getDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
 		$monthlyBranchComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'branch_office');
 		$monthlyReferbyComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'refer_by');
+		$monthlyBranchReferrals = $this->getComparisonByBranchReferrals($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
 
 		$firstDayOfYear =  date('Y').'-01-01';
 		$otherBranches = $this->getOtherByType($firstDayOfYear, date('Y-m-d'), 'branch_office');
@@ -77,6 +78,7 @@ class ReportingRepo{
 		$yearcomparison = $this->getDownloadComparison($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
 		$yearlyBranchComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'branch_office');
 		$yearlyReferbyComparison = $this->getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, 'refer_by');
+		$yearlyBranchReferrals = $this->getComparisonByBranchReferrals($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate);
 
 
 		return array('chart' => $finalData,
@@ -96,6 +98,8 @@ class ReportingRepo{
 					 'other_refer_by' => $otherReferBy,
 					 'other_services' => $otherServices,
 					 'services_comparison' => $monthlyBrnachServicesComparison,
+					 'monthly_brnach_referrals' => $monthlyBranchReferrals,
+					 'yearly_brnach_referrals' => $yearlyBranchReferrals,
 					 );
 		// print_r($yearsArr);
 	}
@@ -194,9 +198,121 @@ class ReportingRepo{
 		}
 
 		return $finalData;
-
 	}
 
+	public function getComparisonByBranchReferrals($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate)
+	{
+		$allBranches = array('Escandon', 'San Angel', 'San Jeronimo');
+		$previousMonthBranches = array();
+		$currentMonthBranches = array();		
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$sth = $GLOBALS['pdo']->query($sql);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		while ($row = $sth->fetch()) {
+			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by q.refer_by";
+			$sth2 = $GLOBALS['pdo']->query($sql2);
+			$sth2->setFetchMode(PDO::FETCH_ASSOC);
+			while ($row2 = $sth2->fetch()) 
+			{
+				if(!isset($previousMonthBranches[$row['branch_office']]))
+					$previousMonthBranches[$row['branch_office']] = array();
+				$previousMonthBranches[$row['branch_office']][strtolower($row2['refer_by'])] = $row2['refer_by_count'];
+			}
+		}
+
+
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$sth = $GLOBALS['pdo']->query($sql);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		while ($row = $sth->fetch()) {
+			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by q.refer_by";
+			$sth2 = $GLOBALS['pdo']->query($sql2);
+			$sth2->setFetchMode(PDO::FETCH_ASSOC);
+			while ($row2 = $sth2->fetch()) 
+			{
+				if(!isset($currentMonthBranches[$row['branch_office']]))
+					$currentMonthBranches[$row['branch_office']] = array();
+				$currentMonthBranches[$row['branch_office']][strtolower($row2['refer_by'])] = $row2['refer_by_count'];
+			}
+		}
+
+		foreach ($allBranches as $key => $singleBranch) 
+		{
+			if(!isset($previousMonthBranches[$singleBranch]))
+				$previousMonthBranches[$singleBranch] = array();
+			if(!isset($currentMonthBranches[$singleBranch]))
+				$currentMonthBranches[$singleBranch] = array();			
+		}
+
+
+
+		$uniqueNetworks = array();
+		if(!empty($currentMonthBranches))
+		{
+			foreach ($currentMonthBranches as $singleBranch => $currentMonthBranch) {
+				if(!empty($currentMonthBranch))
+				{
+					foreach ($currentMonthBranch as $referBy => $downloads) {
+						if(!in_array($referBy, $uniqueNetworks))
+							$uniqueNetworks[] = strtolower($referBy);
+					}
+				}
+			}
+		}
+		if(!empty($previousMonthBranches))
+		{
+			foreach ($previousMonthBranches as $singleBranch => $currentMonthBranch) {
+				if(!empty($currentMonthBranch))
+				{
+					foreach ($currentMonthBranch as $referBy => $downloads) {
+						if(!in_array(strtolower($referBy), $uniqueNetworks))
+							$uniqueNetworks[] = $referBy;
+					}
+				}
+			}
+		}
+
+		if(!empty($uniqueNetworks))
+		{
+			foreach ($uniqueNetworks as $key => $uniqueNetwork) 
+			{
+				foreach ($allBranches as $key => $singleBranch) 
+				{
+					if(!isset($previousMonthBranches[$singleBranch][$uniqueNetwork]))
+						$previousMonthBranches[$singleBranch][$uniqueNetwork] = 0;
+
+					if(!isset($currentMonthBranches[$singleBranch][$uniqueNetwork]))
+						$currentMonthBranches[$singleBranch][$uniqueNetwork] = 0;					
+				}
+			}
+		}
+		
+		$finalData = array();
+
+		if(!empty($previousMonthBranches))
+		{
+			foreach ($previousMonthBranches as $branch => $networks) 
+			{
+				foreach ($networks as $network => $download) {
+					$curDownload = $currentMonthBranches[$branch][$network];
+					$percentage = $this->getPercentage($curDownload, $download);
+					if(!isset($finalData[$network]))
+						$finalData[$network] = array('name' => $network, 'data' => array());
+
+					$finalData[$network]['data'][] = $percentage;
+				}
+			}
+		}
+
+		$inc = 0;
+		$dataArr = array();
+		foreach ($finalData as $key => $data) {
+			$dataArr[$inc] = $data;
+			$inc++;
+		}
+
+		return array('data' => $dataArr, 'branches' => $allBranches);
+	}
 
 	public function getOtherByType($fromDate, $toDate, $type)
 	{

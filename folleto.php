@@ -53,13 +53,15 @@
 
 
       $( document ).ready(function() {
-        $('#dob').datepicker({
-            language: "es",
-            autoclose: true
-        });        
+
+            $('#dob').datepicker({
+                language: "es",
+                autoclose: true
+            });
       });
 
-      function validateEmail(email) {
+      function validateEmail(email) 
+      {
           var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
           return re.test(email);
       }
@@ -451,25 +453,7 @@ function checkLoginState(){
                <option value="19:00">19:00 hrs</option>
             </select>
   					</div>
-<!-- 					<div class="col-sm-3">
-  					<label for="end_time" class="col-sm-2 control-label">
-						at
-					</label>
-  					<select class="selectpicker" id="end_time">
-   						 <option value="8">08:00 hrs</option>
-   						 <option value="9">09:00 hrs</option>
-   						 <option value="10">10:00 hrs</option>
-   						 <option value="11">11:00 hrs</option>
-   						 <option value="12">12:00 hrs</option>
-   						 <option value="13">13:00 hrs</option>
-   						 <option value="14">14:00 hrs</option>
-   						 <option value="15">15:00 hrs</option>
-   						 <option value="16">16:00 hrs</option>
-   						 <option value="17">17:00 hrs</option>
-   						 <option value="18">18:00 hrs</option>
-  						 <option value="19">19:00 hrs</option>
-  					</select>
-  					</div> -->
+
 				</div>
 
 				<div class="form-group">
@@ -540,9 +524,7 @@ function checkLoginState(){
               </label>
           </div>
 
-<!-- 					<label for="other_services" class="col-sm-2 control-label">
-						Other 
-					</label> -->
+
 						<input type="text" class="form-control" id="other_service" placeholder="other" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>

@@ -12,14 +12,35 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-<script src="js/jquery-1.10.2.js"></script> 
-<script src="js/script.js"></script> 
+<!-- <script src="js/jquery-1.10.2.js"></script> 
+ --><script src="js/script.js"></script> 
 <script src="bs3/js/bootstrap.min.js"></script>
 <script src="js/jquery.bootpag.js"></script>
 
 
 <script>
+
 $( document ).ready(function() {
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+    var today = mm+'/'+dd+'/'+yyyy;
+
+        $('#dob').datepicker({
+            language: "es",
+            endDate: today,
+            autoclose: true
+        });
+
   getQueries();
 
 });
@@ -153,9 +174,9 @@ $( document ).ready(function() {
                   <tr>
                     <td>Parent Name</td>
                     <td>Child Name</td>
-                    <td>Age</td>
+                    <td>Date of birth</td>
                     <td>Date</td>
-                    <td>Actions</td>
+                    <td style="width:120px;">Actions</td>
                   </tr>
                 </thead>
                 <tbody id="queriesbody">

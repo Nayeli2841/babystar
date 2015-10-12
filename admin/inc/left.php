@@ -95,6 +95,330 @@
   </div>
 </div>
 
+
+<div id="message_user" class="modal fade" style="z-index:99999!important">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Send Message</h4>
+      </div>
+  
+      <div class="modal-body">
+        <form role="form">
+                        <div class="form-group">
+                            <label class="control-label" for="recipient-name"><font><font>User Email:</font></font></label>
+                            <input type="text" id="user_email" class="form-control" readonly="">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="recipient-name"><font><font>Subject:</font></font></label>
+                            <input type="text" id="email_subject" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="message-text"><font><font>Message:</font></font></label>
+                            <textarea id="email_body" onkeyup="$('#email_body').removeClass('error-class');" style="height:200px;" class="form-control"></textarea>
+                        </div>
+                    </form>
+      </div>
+      
+      <!-- dialog buttons -->
+      <div class="modal-footer">
+      <img src="images/spinner.gif" id="del_spinner" style="display:none;">
+      <button type="button" data-dismiss="modal" onclick="sendEmail();" class="btn btn-primary" id="delete" >Send</button>
+      <button type="button" data-dismiss="modal" class="btn">Close</button> 
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="edit_query" class="modal fade" style="z-index:99999!important">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <input type="hidden" id="query_id" value="">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Edit</h4>
+      </div>
+  
+      <div class="modal-body">
+        
+      <form class="form-horizontal" role="form">
+       
+
+      
+
+
+
+        <div class="form-group">
+           
+          <label for="name" class="col-sm-5 control-label">
+            Name
+          </label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="parent_name" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+
+        <div class="form-group">
+           
+          <label for="childName" class="col-sm-5 control-label">
+            Name your child
+          </label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="child_name" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+
+          <div class="form-group" id="age_div">
+           
+          <label for="age" class="col-sm-5 control-label">
+            Date of birth
+          </label>
+          <div class="col-sm-2">
+          <input type="text" id="dob" class="form-control" style="width:100px;">
+          <!-- <select class="selectpicker" data-width="100%" id="years" onchange="$('#age_div').removeClass('has-error');">
+               <option value="">Years</option>
+               <option value="0">0</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+            </select>
+            </div>
+            <div class="col-sm-2">
+          <select class="selectpicker" id="months"  data-width="100%" onchange="$('#age_div').removeClass('has-error');">
+               <option value="">Months</option>
+               <option value="0">0</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="4">4</option>
+               <option value="5">5</option>
+               <option value="6">6</option>
+               <option value="7">7</option>
+               <option value="8">8</option>
+               <option value="9">9</option>
+               <option value="10">10</option>
+               <option value="11">eleven</option>
+            </select>
+            </div>
+            <div class="col-sm-2">
+            <label for="age" class="col-sm-2 control-label">
+            Days
+          </label>
+            <select class="selectpicker" id="days" data-width="100%" onchange="$('#age_div').removeClass('has-error');">
+               <option value="">Days</option>
+               <option value="0">0</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="4">4</option>
+               <option value="5">5</option>
+               <option value="6">6</option>
+               <option value="7">7</option>
+               <option value="8">8</option>
+               <option value="9">9</option>
+               <option value="10">10</option>
+               <option value="11">eleven</option>
+               <option value="12">12</option>
+               <option value="13">13</option>
+               <option value="14">14</option>
+               <option value="15">fifteen</option>
+               <option value="16">16</option>
+               <option value="17">17</option>
+               <option value="18">18</option>
+               <option value="19">19</option>
+               <option value="20">20</option>
+               <option value="21">21</option>
+               <option value="22">22</option>
+               <option value="23">23</option>
+               <option value="24">24</option>
+               <option value="25">25</option>
+               <option value="26">26</option>
+               <option value="27">27</option>
+               <option value="28">28</option>
+               <option value="29">29</option>
+               <option value="30">30</option>
+            </select> -->
+            </div>
+        </div>
+        
+        <div class="form-group">
+           
+          <label for="branch_office" class="col-sm-5 control-label">
+            Branch Office
+          </label>
+          <div class="col-sm-6">
+            <select class="selectpicker" id="branch_office" onchange="changebranch(this.value);">
+               <option value="Escandon">Escandon</option>
+               <option value="San Jeronimo">San Jeronimo</option>
+               <option value="San Angel">San Angel</option>
+               <option value="other">Testify in area - specify</option>
+            </select>
+            <br><br>
+            <input type="text" class="form-control" id="branch_office_other" placeholder="Other" style="display:none;" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>        
+
+          <div class="form-group">
+           
+          <label for="hours" class="col-sm-5 control-label">
+            Required Hours
+          </label>
+          <div class="col-sm-5">
+          <label for="start_time" class="col-sm-6 control-label" style="text-align:left; width:60px;">
+            From
+          </label>
+          <select class="selectpicker" id="start_time" data-width="25%">
+               <option value="07:00">07:00 hrs</option>
+               <option value="08:00">08:00 hrs</option>
+               <option value="09:00">09:00 hrs</option>
+               <option value="10:00">10:00 hrs</option>
+               <option value="11:00">11:00 hrs</option>
+               <option value="12:00">12:00 hrs</option>
+               <option value="13:00">13:00 hrs</option>
+               <option value="14:00">14:00 hrs</option>
+               <option value="15:00">15:00 hrs</option>
+               <option value="16:00">16:00 hrs</option>
+               <option value="17:00">17:00 hrs</option>
+               <option value="18:00">18:00 hrs</option>
+            </select>
+            <b>To</b>
+               
+               <select class="selectpicker" id="end_time" data-width="25%">
+               <option value="08:00">08:00 hrs</option>
+               <option value="09:00">09:00 hrs</option>
+               <option value="10:00">10:00 hrs</option>
+               <option value="11:00">11:00 hrs</option>
+               <option value="12:00">12:00 hrs</option>
+               <option value="13:00">13:00 hrs</option>
+               <option value="14:00">14:00 hrs</option>
+               <option value="15:00">15:00 hrs</option>
+               <option value="16:00">16:00 hrs</option>
+               <option value="17:00">17:00 hrs</option>
+               <option value="18:00">18:00 hrs</option>
+               <option value="19:00">19:00 hrs</option>
+            </select>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+           
+          <label for="inputEmail3" class="col-sm-5 control-label">
+            Email
+          </label>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" id="email" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+        <div class="form-group">
+           
+          <label for="phone" class="col-sm-5 control-label">
+            Phone
+          </label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="phone" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+
+        <div class="form-group">
+           
+          <label for="services" class="col-sm-5 control-label">
+            What services interest you 
+          </label>
+          <div class="col-sm-6">
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox1" class="services" type="checkbox" value="Web Cameras">
+              <label for="checkbox1">
+                  Web Cameras
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox2" class="services" type="checkbox" value="Early Stimulation">
+              <label for="checkbox2">
+                  Early Stimulation
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox3" class="services" type="checkbox" value="English">
+              <label for="checkbox3">
+                  English
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox4" class="services" type="checkbox" value="Kindergarten">
+              <label for="checkbox4">
+                  Kindergarten
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox5" class="services" type="checkbox" value="Nursery Express">
+              <label for="checkbox5">
+                  Nursery Express
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox6" class="services" type="checkbox" value="Infants">
+              <label for="checkbox6">
+                  Infants
+              </label>
+          </div>
+          <div class="checkbox checkbox-primary">
+              <input id="checkbox7" class="services" type="checkbox" value="Maternal">
+              <label for="checkbox7">
+                  Maternal
+              </label>
+          </div>
+
+
+            <input type="text" class="form-control" id="other_service" placeholder="other" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+
+        <div class="form-group">
+           
+          <label for="branch_office" class="col-sm-5 control-label">
+            How did he find out about us
+          </label>
+          <div class="col-sm-6">
+            <select class="selectpicker" id="refer_to" onChange="changeReferBy(this.value);">
+               <option value="recommendation">Recommendation</option>
+               <option value="google">Google</option>
+               <option value="bing">Bing</option>
+               <option value="youtube">Youtube</option>
+               <option value="facebook">Facebook</option>
+               <option value="external advertising">External advertising</option>
+               <option value="other">Other - specify</option>
+            </select>
+            <br><br>
+            <input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="other" onkeyup="$(this).removeClass('has-error');">
+          </div>
+        </div>
+
+
+      </form>
+
+
+      </div>
+      
+      <!-- dialog buttons -->
+      <div class="modal-footer">
+      <img src="images/spinner.gif" id="del_spinner" style="display:none;">
+      <button type="button" data-dismiss="modal" onclick="validation();" class="btn btn-primary" id="delete" >Send</button>
+      <button type="button" data-dismiss="modal" class="btn">Close</button> 
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div id="query_detail" class="modal fade" style="z-index:99999!important">
   <div class="modal-dialog">
     <div class="modal-content">

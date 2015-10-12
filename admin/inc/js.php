@@ -16,7 +16,7 @@
 
 <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="lib/css/prettify.css"></link>
-
+<link rel="stylesheet" type="text/css" href="../asset/css/bootstrap-datepicker.css"></link>
 <link rel="stylesheet" type="text/css" href="src/bootstrap-wysihtml5.css"></link>
 
 
@@ -44,7 +44,7 @@
 <script type="text/javascript" src="plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
 <link href="css/jquery.datetimepicker.css" media="all" rel="stylesheet" type="text/css" />
 
-<script src="js/jquery.datetimepicker.js"></script>  
+<script src="../asset/js/bootstrap-datepicker.js"></script>  
 
 <script src="js/jquery.bootpag.js" type="text/javascript" /></script>
 

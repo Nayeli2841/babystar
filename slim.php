@@ -150,6 +150,19 @@ $app->group('/api', function () use ($app) {
         response(200, array('data' => $data['data'],  'total_pages' => $data['total_pages']));    
     });   
 
+    $app->post('/mail', function() use ($app){
+        $new = new MessageRepo();
+        $data = $new->sendMessage($app->requestdata);
+        response(200, array('status' => 'success'));    
+    });
+
+
+    $app->get('/get_query_data', function() use ($app){
+        $new = new QueriesRepo();
+        $data = $new->QueryDetail($app->requestdata);
+        response(200, array( 'data' => $data['data'], 'services' => $data['services']));
+    });
+
     $app->post('/query', function() use ($app){
         $new = new QueriesRepo();
         $status = $new->saveQuery($app->requestdata);
