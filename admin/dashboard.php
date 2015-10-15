@@ -129,8 +129,8 @@ $(function () {
                 <div class="panel-body">
                   <table class="table">
                     <thead>
-                    <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
                     <tr><td id="last_month_str"></td><td id="last_month_download"></td></tr>
+                    <tr><td id="cur_month_str"></td><td id="cur_month_download"></td></tr>
                     <tr><td id="cur_percentage_str"></td><td id="cur_percentage"></td></tr>                    
                   </table>
                 </div>
@@ -144,8 +144,8 @@ $(function () {
                 <div class="panel-body">
                   <table class="table">
                     <thead>                  
-                    <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
                     <tr><td id="last_year_str"></td><td id="last_year_download"></td></tr>
+                    <tr><td id="cur_year_str"></td><td id="cur_year_download"></td></tr>
                     <tr><td id="cur_year_percentage_str"></td><td id="cur_year_percentage"></td></tr>                    
                   </table>
                 </div>

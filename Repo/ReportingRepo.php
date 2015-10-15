@@ -1,12 +1,61 @@
 <?php
 class ReportingRepo{
 
+	public $predefinedBranches;
+	public $predefinedReferBy;
+	public $predefinedServices;
+
+	public $predefinedBranchesAND;
+	public $predefinedBranchesOR;
+	public $predefinedReferByAND;
+	public $predefinedReferByOR;
+	public $predefinedServicesAND;
+	public $predefinedServicesByOR;
+
+	function __construct()
+	{
+		$this->predefinedBranches = array('Escandon', 'San Angel', 'San Jeronimo',);
+		$this->predefinedReferBy = array('Google', 'Recomendación', 'Youtube', 'Bing', 'Otro - especificar:','Publicidad exterior');
+		$this->predefinedServices = array('Web Cams', 'Estimulacion', 'Maternales', 'Lactantes', 'Express 2', 'Guarderia', 'Ingles');
+	}
+
+	public function getPredefinedValues($type, $operator)
+	{
+		$str = '';
+		if($type == 'branch_office')
+		{
+			$arr = $this->predefinedBranches;
+		}
+		else if($type == 'refer_by')
+		{
+			$arr = $this->predefinedReferBy;
+		}
+		else if($type == 'service')
+		{
+			$arr = $this->predefinedServices;
+		}
+
+		foreach ($arr as $key => $value) 
+		{
+			$str .= $type." = '".$value."' ".$operator.' ';
+		}
+
+		$str = trim($str, ' || ');
+		$str = trim($str, ' AND ');
+		return $str;
+	}
+
 	public function getReporting($request)
 	{
-//		echo strtotime(date('2012-02-30'));die();
+		$this->predefinedBranchesAND = $this->getPredefinedValues('branch_office', 'AND');
+		$this->predefinedBranchesOR = $this->getPredefinedValues('branch_office', '||');
+		$this->predefinedReferByAND = $this->getPredefinedValues('refer_by', 'AND');
+		$this->predefinedReferByOR = $this->getPredefinedValues('refer_by', '||');
+		$this->predefinedServicesAND = $this->getPredefinedValues('service', 'AND');
+		$this->predefinedServicesOR = $this->getPredefinedValues('service', '||');
 
 		$finalData = array();
-		$yearsArr = range(2011, date('Y'));
+		$yearsArr = range(2011	, date('Y'));
 		if(!empty($yearsArr))
 		{
 			foreach ($yearsArr as $key => $year) 
@@ -107,12 +156,12 @@ class ReportingRepo{
 	public function getComparisonByBranchServices($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate)
 	{
 		$previousMonthBranches = array();
-		$currentMonthBranches = array();		
-		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$currentMonthBranches = array();
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (".str_replace('branch_office', 'q.branch_office', $this->predefinedBranchesOR).") group by q.branch_office";
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while ($row = $sth->fetch()) {
-			$sql2 = "SELECT count(s.service) as service_count, s.service from queries as q, services as s where q.id = s. query_id AND q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by s.service";
+			$sql2 = "SELECT count(s.service) as service_count, s.service from queries as q, services as s where q.id = s. query_id AND q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' AND (".str_replace('service', 's.service', $this->predefinedServicesOR).") group by s.service";
 			$sth2 = $GLOBALS['pdo']->query($sql2);
 			$sth2->setFetchMode(PDO::FETCH_ASSOC);
 			while ($row2 = $sth2->fetch()) 
@@ -123,60 +172,6 @@ class ReportingRepo{
 			}
 		}
 
-
-		// $sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by q.branch_office";
-		// $sth = $GLOBALS['pdo']->query($sql);
-		// $sth->setFetchMode(PDO::FETCH_ASSOC);
-		// while ($row = $sth->fetch()) {
-		// 	$sql2 = "SELECT count(s.service) as service_count, s.service from queries as q, services as s where q.id = s. query_id AND q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by s.service";
-		// 	$sth2 = $GLOBALS['pdo']->query($sql2);
-		// 	$sth2->setFetchMode(PDO::FETCH_ASSOC);
-		// 	while ($row2 = $sth2->fetch()) 
-		// 	{
-		// 		if(!isset($currentMonthBranches[$row['branch_office']]))
-		// 			$currentMonthBranches[$row['branch_office']] = array();
-		// 		$currentMonthBranches[$row['branch_office']][$row2['service']] = $row2['service_count'];
-		// 	}
-		// }
-
-
-		// if(!empty($currentMonthBranches))
-		// {
-		// 	foreach ($currentMonthBranches as $singleBranch => $currentMonthBranch) {
-		// 		if(!array_key_exists($singleBranch, $previousMonthBranches))
-		// 		{
-		// 			$previousMonthBranches[$singleBranch] = array();
-		// 		}
-
-		// 		if(!empty($currentMonthBranch))
-		// 		{
-		// 			foreach ($currentMonthBranch as $singleService => $value) {
-		// 				if(!isset($previousMonthBranch[$singleBranch][$singleService]))
-		// 					$previousMonthBranch[$singleBranch][$singleService] = 0;
-		// 			}
-		// 		}				
-		// 	}
-		// }
-
-		// if(!empty($previousMonthBranches))
-		// {
-		// 	foreach ($previousMonthBranches as $singleBranch => $previousMonthBranch) {
-		// 		if(!isset($previousMonthBranche[$singleBranch]))
-		// 		{
-		// 			$currentMonthBranches[$singleBranch] = array();
-		// 		}
-		// 		if(!empty($previousMonthBranch))
-		// 		{
-		// 			foreach ($previousMonthBranch as $singleService => $value) {
-		// 				if(!isset($currentMonthBranches[$singleBranch][$singleService]))
-		// 					$currentMonthBranches[$singleBranch][$singleService] = 0;
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		// echo "<pre>";
-		// print_r($previousMonthBranches);
 
 		$finalData = array();
 		if(!empty($previousMonthBranches))
@@ -202,14 +197,14 @@ class ReportingRepo{
 
 	public function getComparisonByBranchReferrals($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate)
 	{
-		$allBranches = array('Escandon', 'San Angel', 'San Jeronimo');
+		$allBranches = $this->predefinedBranches;
 		$previousMonthBranches = array();
-		$currentMonthBranches = array();		
-		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$currentMonthBranches = array();
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."'  AND (".$this->predefinedBranchesOR.") group by q.branch_office";
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while ($row = $sth->fetch()) {
-			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by q.refer_by";
+			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' AND (".$this->predefinedReferByOR.") group by q.refer_by";
 			$sth2 = $GLOBALS['pdo']->query($sql2);
 			$sth2->setFetchMode(PDO::FETCH_ASSOC);
 			while ($row2 = $sth2->fetch()) 
@@ -221,11 +216,11 @@ class ReportingRepo{
 		}
 
 
-		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  AND (branch_office = 'Escandon' || branch_office = 'San Jeronimo' || branch_office = 'San Angel') group by q.branch_office";
+		$sql = "SELECT distinct branch_office from queries as q where DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  AND (".$this->predefinedBranchesOR.") group by q.branch_office";
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while ($row = $sth->fetch()) {
-			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' group by q.refer_by";
+			$sql2 = "SELECT count(q.refer_by) as refer_by_count, q.refer_by from queries as q where q.branch_office = '".$row['branch_office']."' AND DATE(q.date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' AND (".$this->predefinedReferByOR.") group by q.refer_by";
 			$sth2 = $GLOBALS['pdo']->query($sql2);
 			$sth2->setFetchMode(PDO::FETCH_ASSOC);
 			while ($row2 = $sth2->fetch()) 
@@ -368,8 +363,8 @@ class ReportingRepo{
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		$curMonthDownload = $sth->fetch();
 
-		$currentMonthstring = date('F-Y', strtotime($fromUpperDate));
-		$lastMonthstring = date('F-Y', strtotime($toUpperDate));
+		$currentMonthstring = date('F-Y', strtotime($toUpperDate));
+		$lastMonthstring = date('F-Y', strtotime($fromUpperDate));
 
 
 		if(!isset($lastMonthDownload['downloads']))
@@ -389,10 +384,16 @@ class ReportingRepo{
 
 	public function getDownloadComparisonByType($fromLowerDate, $fromUpperDate, $toLowerDate, $toUpperDate, $type)
 	{
+		if($type == 'branch_office')
+			$predefinedValues = $this->predefinedBranchesOR;
+		else if($type == 'refer_by')
+			$predefinedValues = $this->predefinedReferByOR;
+
+
 		$finalData = array();
 		$finalBranches1 = array();
 		$finalBranches2 = array();		
-		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' group by ".$type;
+		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$fromLowerDate."' AND  '".$fromUpperDate."' AND ($predefinedValues) group by ".$type;
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while($row = $sth->fetch())
@@ -401,7 +402,7 @@ class ReportingRepo{
 		}
 
 
-		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$toLowerDate."' AND  '".$toUpperDate."'  group by ".$type;
+		$sql = "SELECT ".$type.", COUNT(DISTINCT id) downloads FROM queries where DATE(date_created) between '".$toLowerDate."' AND  '".$toUpperDate."' AND ($predefinedValues) AND ($predefinedValues)  group by ".$type;
 		$sth = $GLOBALS['pdo']->query($sql);
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		while($row = $sth->fetch())
@@ -447,23 +448,30 @@ class ReportingRepo{
 	{
 		$percentage = '-';
 		if($curDownloads == 0 && $lastDownloads == 0)
-			$percentage = 0;
+			$percentage = '-';
 		else
 		{
-			if($curDownloads > $lastDownloads)
-			{
-				if($lastDownloads > 0)
-					$percentage = ($curDownloads / $lastDownloads) * 100;
-				else
-					$percentage = '-';
-			}
+			if($curDownloads == 0 || $lastDownloads == 0)
+				$percentage = '-';
 			else
 			{
-				if($lastDownloads > 0 && $curDownloads > 0)
-					$percentage = (($curDownloads / $lastDownloads) - 1) * 100;
-				else
-					$percentage = '-';
+				$percentage = (($curDownloads - $lastDownloads) / $lastDownloads) * 100;
 			}
+			//$curDownloads > $lastDownloads
+			// if($curDownloads > $lastDownloads)
+			// {
+			// 	if($lastDownloads > 0)
+			// 		$percentage = ($curDownloads / $lastDownloads) * 100;
+			// 	else
+			// 		$percentage = '-';
+			// }
+			// else
+			// {
+			// 	if($lastDownloads > 0 && $curDownloads > 0)
+			// 		$percentage = (($curDownloads / $lastDownloads) - 1) * 100;
+			// 	else
+			// 		$percentage = '-';
+			// }
 		}	
 		$percentage = round($percentage);	
 		return $percentage;	

@@ -349,8 +349,9 @@ class QueriesRepo
 		}
 
 		// add services
-		if(!empty($request['services']))
+		if(!isset($request['services']))
 			$request['services'] = array();
+
 		$this->addServices($queryId, $request['services']);
 
 		return 'success';
