@@ -483,43 +483,43 @@ function checkLoginState(){
 					</label>
 					<div class="col-sm-6">
           <div class="checkbox checkbox-primary">
-              <input id="checkbox1" class="services" type="checkbox" value="Web Cameras">
+              <input id="checkbox1" class="services" type="checkbox" value="Web Cams">
               <label for="checkbox1">
                   Web Cameras
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox2" class="services" type="checkbox" value="Early Stimulation">
+              <input id="checkbox2" class="services" type="checkbox" value="Estimulacion">
               <label for="checkbox2">
                   Early Stimulation
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox3" class="services" type="checkbox" value="English">
+              <input id="checkbox3" class="services" type="checkbox" value="Ingles">
               <label for="checkbox3">
                   English
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox4" class="services" type="checkbox" value="Kindergarten">
+              <input id="checkbox4" class="services" type="checkbox" value="Guarderia">
               <label for="checkbox4">
                   Kindergarten
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox5" class="services" type="checkbox" value="Nursery Express">
+              <input id="checkbox5" class="services" type="checkbox" value="Express 2">
               <label for="checkbox5">
                   Nursery Express
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox6" class="services" type="checkbox">
+              <input id="checkbox6" class="services" type="checkbox" value="Lactantes">
               <label for="checkbox6">
                   Infants
               </label>
           </div>
           <div class="checkbox checkbox-primary">
-              <input id="checkbox7" class="services" type="checkbox">
+              <input id="checkbox7" class="services" type="checkbox" value="Maternales">
               <label for="checkbox7">
                   Maternal
               </label>

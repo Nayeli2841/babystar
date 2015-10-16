@@ -298,7 +298,7 @@ class QueriesRepo
                   </tr>
                   <tr>
                     <th style="vertical-align: top;">Services</th>
-                    <td id="services">Guarderia<br>Lactantes<br>Web Cams<br>Estimulacion<br></td>
+                    <td id="services">'.$data1['all_services'].'</td>
                   </tr>
 
                 </thead>
@@ -330,7 +330,7 @@ class QueriesRepo
 		{
 			foreach ($sql as $key => $services) 
 			{
-				$services = array_map('utf8_encode', $services);
+//				$services = array_map('utf8_encode', $services);
 				$serviceArr[] = $services['service'];
 				$data[] = $services;
 			}
@@ -378,6 +378,7 @@ class QueriesRepo
 		{
 			foreach ($services as $key => $service) 
 			{
+				$service = utf8_decode($service);
 				$values = array('service' => $service, 'query_id' => $queryId);
 				$query = $GLOBALS['con']->insertInto('services', $values)->execute();
 			}
@@ -386,6 +387,15 @@ class QueriesRepo
 
 	public function saveQuery($request)
 	{
+
+		$request['parent_name'] = utf8_decode($request['parent_name']);
+		$request['child_name'] = utf8_decode($request['child_name']);
+		$request['branch_office'] = utf8_decode($request['branch_office']);
+		$request['email'] = utf8_decode($request['email']);
+		$request['refer_by'] = utf8_decode($request['refer_by']);
+		$request['refery_by_other'] = utf8_decode($request['refery_by_other']);
+		$request['branch_office_other'] = utf8_decode($request['branch_office_other']);
+
 		if($request['branch_office'] == 'other')
 			$request['branch_office'] = $request['branch_office_other'];
 
@@ -393,6 +403,7 @@ class QueriesRepo
 			$request['refer_by'] = $request['refery_by_other'];
 
 		$dateCreated = date('Y-m-d H:i:s');
+
 
 		$date = DateTime::createFromFormat('d/m/Y', $request['dob']);
 		$dob = $date->format('Y-m-d');
@@ -416,7 +427,7 @@ class QueriesRepo
 
 
 		$services = implode(',', $request['services']);
-		$values['services'] = $services;
+		$values['services'] = utf8_decode($services);
 
 		if(!empty($request['id']))
 		{
