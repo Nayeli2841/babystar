@@ -15,6 +15,26 @@ function showMsg(id, msg, type)
     $(id).html(msg).addClass(type).slideDown('fast').delay(2500).slideUp(1000,function(){$(id).removeClass(type)}); 
 }
 
+function exportData()
+{
+    var startDate = $.trim($('#start_date').val());
+    var endDate = $.trim($('#end_date').val());
+    var check = true;
+
+    if(startDate == '')
+    {
+        $('#start_date').addClass('error-class');
+        check = false;
+    }
+
+    if(endDate == '')
+    {
+        $('#end_date').addClass('error-class');
+        check = false;
+    }
+
+    return check;
+}
 function login()
 {
     var email = $.trim($('#email').val());

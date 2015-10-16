@@ -11,8 +11,12 @@ class QueriesRepo
 
 	public function createExport($request)
     {
-    	$startDate = date('Y-m-d', strtotime($request['start_date']));
-    	$endDate = date('Y-m-d', strtotime($request['end_date']));
+		$date = DateTime::createFromFormat('d/m/Y', $request['start_date']);
+		$startDate = $date->format('Y-m-d');
+
+		$date = DateTime::createFromFormat('d/m/Y', $request['end_date']);
+		$endDate = $date->format('Y-m-d');
+
 
 		$objPHPExcel = new PHPExcel();
 
@@ -387,9 +391,11 @@ class QueriesRepo
 
 		if($request['refer_by'] == 'other')
 			$request['refer_by'] = $request['refery_by_other'];
-		
+
 		$dateCreated = date('Y-m-d H:i:s');
-		$dob = date('Y-m-d', strtotime($request['dob']));
+
+		$date = DateTime::createFromFormat('d/m/Y', $request['dob']);
+		$dob = $date->format('Y-m-d');
 
 		$values = array('filename' => '',
 						'parent_name' => $request['parent_name'],

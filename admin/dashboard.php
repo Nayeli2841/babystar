@@ -18,6 +18,7 @@
 $(function () {
    $('#start_date, #end_date').datepicker({
             language: "es",
+            format:"dd/mm/yyyy",
             autoclose: true
         });
   getReportingData()
@@ -50,11 +51,11 @@ $(function () {
           <div class="row" style="margin-top:10px;">
             <div class="col-lg-12">
 
-              <form method="post" action="../api/export">
+              <form method="post" action="../api/export" onsubmit="return exportData();">
                 <table>
                   <tr>
-                  <td><input type="text" id="start_date" name="start_date" placeholder="Start Date"></td>
-                  <td><input type="text" id="end_date" name="end_date" placeholder="End Date"></td>
+                  <td><input type="text" readonly="readonly" onclick="$(this).removeClass('error-class');" id="start_date" name="start_date" placeholder="Start Date"></td>
+                  <td><input type="text" readonly="readonly"  onclick="$(this).removeClass('error-class');" id="end_date" name="end_date" placeholder="End Date"></td>
                   <td><button type="submit" href="" class="btn btn-primary">Export Data as CSV</button></td>
                   </tr>
                 </table>

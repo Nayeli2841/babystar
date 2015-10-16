@@ -38,6 +38,7 @@ $( document ).ready(function() {
         $('#dob').datepicker({
             language: "es",
             endDate: today,
+            format:"dd/mm/yyyy",
             autoclose: true
         });
 
