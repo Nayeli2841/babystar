@@ -1,6 +1,73 @@
 <?php
+/** Include PHPExcel */
+ini_set('max_execution_time', 900);
+ini_set('memory_limit', '-1');
+
+require_once dirname(__FILE__) . '/../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+require_once dirname(__FILE__) . '/../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
+
 class QueriesRepo
 {
+
+	public function createExport($request)
+    {
+    	$startDate = date('Y-m-d', strtotime($request['start_date']));
+    	$endDate = date('Y-m-d', strtotime($request['end_date']));
+
+		$objPHPExcel = new PHPExcel();
+
+		$sql = "Select id from queries where DATE(date_created) between '".$startDate."'  AND  '".$endDate."'";
+		$sth = $GLOBALS['pdo']->query($sql);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+
+		$row = 1;
+		$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, 'DB Id')
+									  ->setCellValue('B'.$row, 'File Name')
+									  ->setCellValue('C'.$row, 'Parent Name')
+									  ->setCellValue('D'.$row, 'Child Name')
+									  ->setCellValue('E'.$row, 'Date of birth')
+									  ->setCellValue('F'.$row, 'Start Time')
+									  ->setCellValue('G'.$row, 'End Time')
+									  ->setCellValue('H'.$row, 'Email')
+									  ->setCellValue('I'.$row, 'Phone')
+									  ->setCellValue('J'.$row, 'Refer By')
+									  ->setCellValue('K'.$row, 'Services')
+									  ->setCellValue('L'.$row, 'Date');
+
+		$row++;
+		while ($rec = $sth->fetch()) 
+		{
+			$queryDetail = $this->queryDetail(array('id' => $rec['id']));
+
+		    $objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $queryDetail['data']['id'])
+										  ->setCellValue('B'.$row, $queryDetail['data']['filename'])
+										  ->setCellValue('C'.$row, $queryDetail['data']['parent_name'])
+										  ->setCellValue('D'.$row, $queryDetail['data']['child_name'])
+										  ->setCellValue('E'.$row, $queryDetail['data']['dob_formatted'])
+										  ->setCellValue('F'.$row, $queryDetail['data']['start_time'])
+										  ->setCellValue('G'.$row, $queryDetail['data']['end_time'])
+										  ->setCellValue('H'.$row, $queryDetail['data']['email'])
+										  ->setCellValue('I'.$row, $queryDetail['data']['phone'])
+										  ->setCellValue('J'.$row, $queryDetail['data']['refer_by'])
+										  ->setCellValue('K'.$row, $queryDetail['data']['all_services'])
+										  ->setCellValue('L'.$row, $queryDetail['data']['date_created_formatted']);
+
+//		                                  ->setCellValue('D'.$row, PHPExcel_Shared_Date::stringToExcel($rec['date_of_birth']))
+		 //   $objPHPExcel->getActiveSheet()->getStyle('D'.$row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX15);
+		 //   $objPHPExcel->getActiveSheet()->getStyle('E'.$row)->getNumberFormat()->setFormatCode('£#,##0.00');
+		    $row++;
+		}		
+
+
+		$writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV');
+		//$writer->save('export.csv');
+
+		header('Content-Type: application/csv');
+		header("Content-Disposition: attachment; filename=\"export.csv\"");
+		header("Cache-Control: max-age=0");
+		$writer->save("php://output");		
+    	die();
+    }
 
 	// Add Vendor Images
 	public function sendAdminQuery($data)
@@ -253,14 +320,21 @@ class QueriesRepo
 		$data = array();
 		$query = $GLOBALS['con']->from('queries')->where('id', $request['id']);
 		$sql = $GLOBALS['con']->from('services')->where('query_id', $request['id']);
+
+		$serviceArr = array();
 		if(!empty($sql))
 		{
 			foreach ($sql as $key => $services) 
 			{
 				$services = array_map('utf8_encode', $services);
+				$serviceArr[] = $services['service'];
 				$data[] = $services;
 			}
 		}
+
+		$allServices = implode(',', $serviceArr);
+
+
 		if(!empty($query))
 		{
 			foreach ($query as $key => $queries) 
@@ -277,6 +351,7 @@ class QueriesRepo
 				if(!empty($queries['date_created']))
 					$queries['date_created_formatted'] = date('d F Y H:i', strtotime($queries['date_created']));
 
+				$queries['all_services'] = $allServices;
 				$queries = array_map('utf8_encode', $queries);
 				$resp = $queries;
 			}
@@ -330,9 +405,17 @@ class QueriesRepo
 						'date_created' => $dateCreated,
 						);
 
+		if(!isset($request['services']))
+			$request['services'] = array();
+
+
+		$services = implode(',', $request['services']);
+		$values['services'] = $services;
+
 		if(!empty($request['id']))
 		{
 			unset($values['date_created']);
+
 			$queryId = $request['id'];
 			$query = $GLOBALS['con']->update('queries', $values, $request['id'])->execute();
 		}
@@ -349,9 +432,6 @@ class QueriesRepo
 		}
 
 		// add services
-		if(!isset($request['services']))
-			$request['services'] = array();
-
 		$this->addServices($queryId, $request['services']);
 
 		return 'success';

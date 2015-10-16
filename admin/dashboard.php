@@ -13,7 +13,13 @@
     <![endif]-->
 
 <script>
+
+
 $(function () {
+   $('#start_date, #end_date').datepicker({
+            language: "es",
+            autoclose: true
+        });
   getReportingData()
 });
 </script>
@@ -41,6 +47,21 @@ $(function () {
     <!--scrollable wrapper start-->
       <div class="scrollable wrapper">
 
+          <div class="row" style="margin-top:10px;">
+            <div class="col-lg-12">
+
+              <form method="post" action="../api/export">
+                <table>
+                  <tr>
+                  <td><input type="text" id="start_date" name="start_date" placeholder="Start Date"></td>
+                  <td><input type="text" id="end_date" name="end_date" placeholder="End Date"></td>
+                  <td><button type="submit" href="" class="btn btn-primary">Export Data as CSV</button></td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+            </div>
+
         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 
@@ -51,6 +72,7 @@ $(function () {
         <div id="referby_year_container" style="margin-top:10px;"></div>
 
 
+          
 
 
 

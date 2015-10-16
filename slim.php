@@ -131,6 +131,12 @@ $app->group('/api', function () use ($app) {
         response(200, array('data' => $data));
     });
 
+    $app->post('/export', function() use ($app){
+        $new = new QueriesRepo();
+        $data = $new->createExport($app->requestdata);
+        response(200, array('data' => $data));
+    });
+
     $app->get('/logout' , function () use ($app){
         session_destroy();
         response(200, array());

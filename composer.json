@@ -3,12 +3,14 @@
 		"slim/slim": ">=2.4.0",
         "twig/twig":"~1.0",
 		"lichtner/fluentpdo": "dev-master",
-        "slim/views": "0.1.*" 
+        "slim/views": "0.1.*", 
+        "phpoffice/phpexcel": "~1.7"
     },
 	"autoload": {
 		"classmap": ["Repo"],
         "psr-0": {
-		   "Slim\\Views\\": "./"
+		   "Slim\\Views\\": "./",
+           "ExcelAnt": ["lib/", "test/"]
         }
     },
     "target-dir": "Slim/Extras"

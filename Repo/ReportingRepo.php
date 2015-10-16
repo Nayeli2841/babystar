@@ -473,6 +473,7 @@ class ReportingRepo{
 			// 		$percentage = '-';
 			// }
 		}	
+		if($percentage != '-')
 		$percentage = round($percentage);	
 		return $percentage;	
 	}
