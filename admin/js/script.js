@@ -35,6 +35,53 @@ function exportData()
 
     return check;
 }
+
+function importCSV()
+{
+    var field = $.trim($('#field').val());
+    var path = $.trim($('#path').val());
+    check = true;
+    if(field == '')
+    {
+        $('#field').focus();
+        $('#field').addClass('error-class');
+        check = false;        
+    }
+
+    if(path == '')
+    {
+        $('#path').focus();
+        $('#path').addClass('error-class');
+        check = false;        
+    }
+
+    if(check)
+    {
+      $('#csv_spinner').show();
+        $.ajax({
+          type: 'POST',
+          url: apiUrl + 'import_csv',
+          dataType : "JSON",
+          data: { field: field, path: path },
+          beforeSend:function(){
+
+          },
+          success:function(data){
+            $('#csv_spinner').hide();
+            if(data.status == 'success')
+            {
+                showMsg('#msg', 'Record imported sucessfully', 'green')
+                document.reload();
+            }
+          },
+          error:function(jqxhr){
+            $('#csv_spinner').hide();            
+            showMsg('#msg', 'Some error happened appeared while import', 'red')
+          }
+        });        
+    }
+}
+
 function login()
 {
     var email = $.trim($('#email').val());

@@ -15,6 +15,7 @@
 
  <li class="sub"> <a <?php if($currFile == 'dashboard.php' ) echo 'class="active"'; ?> href="dashboard.php"><i class="fa fa-sitemap"></i><span>Dashboard</span></a>
  <li class="sub"> <a <?php if($currFile == 'queries.php' ) echo 'class="active"'; ?> href="queries.php"><i class="fa fa-sitemap"></i><span>Queries</span></a>
+ <li class="sub"> <a <?php if($currFile == 'import.php' ) echo 'class="active"'; ?> href="import.php"><i class="fa fa-sitemap"></i><span>Import</span></a>
 
 
 <?php /*

@@ -191,6 +191,19 @@ $app->group('/api', function () use ($app) {
 //        response(200, array('data' => $code));
     });
 
+    $app->post('/csv_upload', function() use ($app){
+        $fileupload = new FileUpload();
+        $file = $_FILES['csv'];
+        $resp = $fileupload->uploadTmp($file, 'temp');
+        response($resp['code'], $resp);
+    });     
+
+    $app->post('/import_csv', function() use ($app){
+        $importRepo = new ImportExportRepo();
+        $resp = $importRepo->importCsv($app->requestdata);
+        response($resp['code'], $resp);
+    });     
+
 });
 
 

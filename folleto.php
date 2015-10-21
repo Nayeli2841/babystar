@@ -1,3 +1,7 @@
+<?php 
+  require 'vendor/autoload.php';
+  $translations = Translation::getTranslations('es');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -295,7 +299,7 @@ function checkLoginState(){
 
           </label>
           <div class="col-sm-4">
-          <a class="btn btn-primary" id="loginBtn" onClick="checkLoginState();"><i class="fa fa-facebook"></i> Fill information using Facebook</a>
+          <a class="btn btn-primary" id="loginBtn" onClick="checkLoginState();"><i class="fa fa-facebook"></i> <?php echo $translations['fill_form']; ?></a>
           </div>
         
 
@@ -307,7 +311,7 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="name" class="col-sm-4 control-label">
-						Name
+						<?php echo $translations['name']; ?>
 					</label>
 					<div class="col-sm-6">
 						<input type="text" class="form-control" id="parent_name" onkeyup="$(this).removeClass('has-error');">
@@ -317,7 +321,7 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="childName" class="col-sm-4 control-label">
-						Name your child
+						<?php echo $translations['child_name']; ?>
 					</label>
 					<div class="col-sm-6">
 						<input type="text" class="form-control" id="child_name" onkeyup="$(this).removeClass('has-error');">
@@ -327,7 +331,7 @@ function checkLoginState(){
 					<div class="form-group" id="age_div">
 					 
 					<label for="age" class="col-sm-4 control-label">
-						Date of birth
+						<?php echo $translations['dob']; ?>
 					</label>
 					<div class="col-sm-2">
           <input type="text" id="dob" class="form-control">
@@ -400,28 +404,28 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="branch_office" class="col-sm-4 control-label">
-						Branch Office
+						<?php echo $translations['branch_office']; ?>
 					</label>
 					<div class="col-sm-6">
 						<select class="selectpicker" id="branch_office" onchange="changebranch(this.value);">
    						 <option value="Escandon">Escandon</option>
    						 <option value="San Jeronimo">San Jeronimo</option>
    						 <option value="San Angel">San Angel</option>
-   						 <option value="other">Testify in area - specify</option>
+   						 <option value="other"><?php echo $translations['other_branch']; ?></option>
   					</select>
             <br><br>
-  					<input type="text" class="form-control" id="branch_office_other" placeholder="Other" style="display:none;" onkeyup="$(this).removeClass('has-error');">
+  					<input type="text" class="form-control" id="branch_office_other" placeholder="<?php echo $translations['other']; ?>" style="display:none;" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>				
 
 					<div class="form-group">
 					 
 					<label for="hours" class="col-sm-4 control-label">
-						Required Hours
+						<?php echo $translations['required_hours']; ?>
 					</label>
 					<div class="col-sm-5">
 					<label for="start_time" class="col-sm-6 control-label" style="text-align:left; width:60px;">
-						From
+						<?php echo $translations['from']; ?>
 					</label>
 					<select class="selectpicker" id="start_time" data-width="25%">
    						 <option value="07:00">07:00 hrs</option>
@@ -437,7 +441,7 @@ function checkLoginState(){
    						 <option value="17:00">17:00 hrs</option>
    						 <option value="18:00">18:00 hrs</option>
   					</select>
-            <b>To</b>
+            <b><?php echo $translations['to']; ?></b>
                
                <select class="selectpicker" id="end_time" data-width="25%">
                <option value="08:00">08:00 hrs</option>
@@ -460,7 +464,7 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="inputEmail3" class="col-sm-4 control-label">
-						Email
+						<?php echo $translations['email']; ?>
 					</label>
 					<div class="col-sm-6">
 						<input type="email" class="form-control" id="email" onkeyup="$(this).removeClass('has-error');">
@@ -469,7 +473,7 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="phone" class="col-sm-4 control-label">
-						Phone
+						<?php echo $translations['phone']; ?>
 					</label>
 					<div class="col-sm-6">
 						<input type="text" class="form-control" id="phone" onkeyup="$(this).removeClass('has-error');">
@@ -479,74 +483,74 @@ function checkLoginState(){
 				<div class="form-group">
 					 
 					<label for="services" class="col-sm-4 control-label">
-						What services interest you 
+						<?php echo $translations['what_services']; ?>
 					</label>
 					<div class="col-sm-6">
           <div class="checkbox checkbox-primary">
               <input id="checkbox1" class="services" type="checkbox" value="Web Cams">
               <label for="checkbox1">
-                  Web Cameras
+              <?php echo $translations['web_cameras']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox2" class="services" type="checkbox" value="Estimulacion">
               <label for="checkbox2">
-                  Early Stimulation
+              <?php echo $translations['stimulation']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox3" class="services" type="checkbox" value="Ingles">
               <label for="checkbox3">
-                  English
+              <?php echo $translations['english']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox4" class="services" type="checkbox" value="Guarderia">
               <label for="checkbox4">
-                  Kindergarten
+              <?php echo $translations['kindergarten']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox5" class="services" type="checkbox" value="Express 2">
               <label for="checkbox5">
-                  Nursery Express
+              <?php echo $translations['nursery_express']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox6" class="services" type="checkbox" value="Lactantes">
               <label for="checkbox6">
-                  Infants
+              <?php echo $translations['infants']; ?>
               </label>
           </div>
           <div class="checkbox checkbox-primary">
               <input id="checkbox7" class="services" type="checkbox" value="Maternales">
               <label for="checkbox7">
-                  Maternal
+              <?php echo $translations['maternal']; ?>
               </label>
           </div>
 
 
-						<input type="text" class="form-control" id="other_service" placeholder="other" onkeyup="$(this).removeClass('has-error');">
+						<input type="text" class="form-control" id="other_service" placeholder=" <?php echo $translations['other']; ?>" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
 				<div class="form-group">
 					 
 					<label for="branch_office" class="col-sm-4 control-label">
-						How did he find out about us
+            <?php echo $translations['how_did_you_find']; ?>
 					</label>
 					<div class="col-sm-6">
 						<select class="selectpicker" id="refer_to" onChange="changeReferBy(this.value);">
-   						 <option value="recommendation">Recommendation</option>
+   						 <option value="recommendation"><?php echo $translations['recommendation']; ?></option>
    						 <option value="google">Google</option>
    						 <option value="bing">Bing</option>
    						 <option value="youtube">Youtube</option>
    						 <option value="facebook">Facebook</option>
-   						 <option value="external advertising">External advertising</option>
-   						 <option value="other">Other - specify</option>
+   						 <option value="external advertising"><?php echo $translations['external_ad']; ?></option>
+   						 <option value="other"><?php echo $translations['other_specify']; ?></option>
   					</select>
             <br><br>
-  					<input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="other" onkeyup="$(this).removeClass('has-error');">
+  					<input type="text" style="display:none; margin-top:15px;" class="form-control" id="refer_to_other" placeholder="<?php echo $translations['other']; ?>" onkeyup="$(this).removeClass('has-error');">
 					</div>
 				</div>
 
@@ -554,7 +558,7 @@ function checkLoginState(){
 					<div class="col-sm-offset-4 col-sm-10">
 						 
 						<button type="button" class="btn btn-primary" onClick="validation();">
-							Download Brochure
+						<?php echo $translations['download_brochure']; ?>
 						</button>
 
             <img id="query_spinner" src="asset/images/spinner.gif" style="display:none;">
